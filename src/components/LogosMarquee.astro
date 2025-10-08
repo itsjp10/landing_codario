@@ -1,0 +1,158 @@
+---
+export interface LogoItem {
+	src: string;
+	alt: string;
+}
+
+const baseColors = ['3BAFDA', '9BE564', '0A2540'];
+
+const encodeSvg = (value: string) => encodeURIComponent(value).replace(/'/g, '%27');
+
+const createPlaceholderLogo = (label: string, index: number) => {
+	const sanitizedLabel = label.replace(/&/g, '&amp;').replace(/[<>]/g, '').replace(/"/g, '\'');
+	const color = baseColors[index % baseColors.length];
+	const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="160" height="48" viewBox="0 0 160 48" fill="none"><rect width="160" height="48" rx="14" fill="#FFFFFF"/><rect x="0.75" y="0.75" width="158.5" height="46.5" rx="13.25" stroke="#0A2540" stroke-opacity="0.1" stroke-width="1.5"/><text x="50%" y="53%" dominant-baseline="middle" text-anchor="middle" font-family="Poppins, Arial, sans-serif" font-size="14" font-weight="600" fill="#${color}">${sanitizedLabel}</text></svg>`;
+	return `data:image/svg+xml;utf8,${encodeSvg(svg)}`;
+};
+
+const placeholderLabels = ['Launchpad DAO', 'Northwind Ops', 'Stripe Atlas', 'OrbitOps', 'Arcadia Health', 'Beaconly'];
+
+const fallbackLogos: LogoItem[] = placeholderLabels.map((label, index) => ({
+	src: createPlaceholderLogo(label, index),
+	alt: label,
+}));
+
+const { logos: providedLogos } = Astro.props as { logos?: LogoItem[] };
+const logos = (providedLogos && providedLogos.length > 0 ? providedLogos : fallbackLogos) as LogoItem[];
+const marqueeItems = [...logos, ...logos];
+---
+
+<section aria-labelledby="logos-marquee-heading" class="logos-marquee">
+	<div class="logos-marquee__inner">
+		<h2 id="logos-marquee-heading" class="sr-only">Clients and tools we collaborate with</h2>
+		<div class="logos-marquee__fade logos-marquee__fade--left" aria-hidden="true"></div>
+		<div class="logos-marquee__fade logos-marquee__fade--right" aria-hidden="true"></div>
+		<div class="logos-marquee__track" role="presentation">
+			{marqueeItems.map(({ src, alt }, index) => (
+				<figure
+					class="logos-marquee__item"
+					key={`${src}-${index}`}
+					aria-hidden={index >= logos.length ? 'true' : undefined}
+				>
+					<img
+						src={src}
+						alt={alt}
+						height="48"
+						width="160"
+						loading="lazy"
+						decoding="async"
+						class="logos-marquee__img"
+					/>
+				</figure>
+			))}
+		</div>
+	</div>
+</section>
+
+<style>
+	.logos-marquee {
+		position: relative;
+		padding-block: 3rem;
+		background: linear-gradient(180deg, rgba(244, 246, 248, 0.65) 0%, rgba(255, 255, 255, 0.95) 100%);
+	}
+
+	.logos-marquee__inner {
+		position: relative;
+		margin-inline: auto;
+		max-width: 80rem;
+		border-radius: 1.75rem;
+		border: 1px solid rgba(10, 37, 64, 0.08);
+		background: rgba(255, 255, 255, 0.85);
+		box-shadow: 0 28px 60px -32px rgba(10, 37, 64, 0.3);
+		padding-block: 1.5rem;
+		overflow: hidden;
+	}
+
+	.logos-marquee__track {
+		display: flex;
+		align-items: center;
+		gap: clamp(3rem, 6vw, 4.5rem);
+		padding-inline: clamp(2rem, 5vw, 3.5rem);
+		width: max-content;
+		height: 4rem;
+		min-height: 4rem;
+		animation: marquee-scroll 32s linear infinite;
+	}
+
+	.logos-marquee__inner:hover .logos-marquee__track {
+		animation-play-state: paused;
+	}
+
+	.logos-marquee__item {
+		flex: 0 0 auto;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		min-width: clamp(8rem, 16vw, 10rem);
+		height: 4rem;
+		padding-inline: clamp(1rem, 2vw, 1.5rem);
+		border-radius: 1.5rem;
+		background: rgba(244, 246, 248, 0.75);
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+		filter: grayscale(1) saturate(0.35) brightness(0.95);
+		opacity: 0.82;
+		transition:
+			filter 200ms cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 200ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.logos-marquee__item:hover,
+	.logos-marquee__item:focus-visible {
+		filter: grayscale(0) saturate(1.15) brightness(1);
+		opacity: 1;
+		transform: translateY(-4px) scale(1.02);
+		outline: none;
+	}
+
+	.logos-marquee__img {
+		max-height: 100%;
+		width: auto;
+		object-fit: contain;
+	}
+
+	.logos-marquee__fade {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		width: clamp(3rem, 5vw, 4.5rem);
+		pointer-events: none;
+		z-index: 2;
+	}
+
+	.logos-marquee__fade--left {
+		left: 0;
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 10%, rgba(255, 255, 255, 0));
+	}
+
+	.logos-marquee__fade--right {
+		right: 0;
+		background: linear-gradient(270deg, rgba(255, 255, 255, 0.95) 10%, rgba(255, 255, 255, 0));
+	}
+
+	@keyframes marquee-scroll {
+		0% {
+			transform: translateX(0);
+		}
+		100% {
+			transform: translateX(-50%);
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.logos-marquee__track {
+			animation: none;
+			transform: none;
+		}
+	}
+</style>

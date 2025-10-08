@@ -1,39 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import LogosMarquee from '../components/LogosMarquee.astro';
 ---
 
 <BaseLayout title="Codario Labs — Web that launches and scales">
 	<Header />
-	<section id="top" class="bg-brand-gray/30 py-24 sm:py-32">
-		<div class="container text-center">
-			<p class="text-sm font-semibold uppercase tracking-[0.25em] text-brand-cyan">
-				Codario Labs
-			</p>
-			<h1 class="section-title mx-auto mt-6 max-w-3xl">
-				Build web experiences that launch and scale.
-			</h1>
-			<p class="mx-auto mt-6 max-w-2xl text-lg text-brand-dark/80">
-				We’re setting up the full Codario Labs website. Check back soon for an immersive experience featuring Tailwind,
-				Astro islands, and GSAP-powered animations.
-			</p>
-			<div class="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-				<a href="#contact" class="btn-primary">
-					Book a Call
-				</a>
-				<a href="#work" class="btn-secondary">
-					See Our Work
-				</a>
-			</div>
-		</div>
-	</section>
+	<Hero />
+	<LogosMarquee />
 
 	<section id="work" class="py-24 sm:py-32">
 		<div class="container space-y-6 text-center">
 			<h2 class="section-title">Recent Work</h2>
 			<p class="mx-auto max-w-3xl text-brand-dark/70">
-				The full Codario Labs showcase is on the way. Expect modern landing pages, web applications, and growth-ready
-				systems designed for startups.
+				The full Codario Labs showcase is on the way. Expect modern landing pages, web applications, and growth-ready systems designed for startups.
 			</p>
 		</div>
 	</section>
@@ -42,8 +23,7 @@ import Header from '../components/Header.astro';
 		<div class="container space-y-6 text-center">
 			<h2 class="section-title">Services</h2>
 			<p class="mx-auto max-w-3xl text-brand-dark/70">
-				From audit to launch, we deliver tailored development services. Full copywriting and animation-rich sections are
-				coming shortly.
+				From audit to launch, we deliver tailored development services. Full copywriting and animation-rich sections are coming shortly.
 			</p>
 		</div>
 	</section>
@@ -61,15 +41,14 @@ import Header from '../components/Header.astro';
 		<div class="container space-y-6 text-center">
 			<h2 class="section-title">About Codario Labs</h2>
 			<p class="mx-auto max-w-3xl text-brand-dark/70">
-				We build web experiences for founders who move fast. The team profile, process timeline, and testimonials will be
-				landing soon.
+				We build web experiences for founders who move fast. The team profile, process timeline, and testimonials will be landing soon.
 			</p>
 		</div>
 	</section>
 
 	<section id="contact" class="py-24 sm:py-32">
 		<div class="container space-y-6 text-center">
-			<h2 class="section-title">Let’s collaborate</h2>
+			<h2 class="section-title">Let's collaborate</h2>
 			<p class="mx-auto max-w-3xl text-brand-dark/70">
 				Need a partner to ship your next product? Reach out at <a class="text-brand-cyan hover:text-brand-dark" href="mailto:hello@codariolabs.com">hello@codariolabs.com</a> while we finalize the contact form.
 			</p>
