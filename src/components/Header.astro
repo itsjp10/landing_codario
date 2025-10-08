@@ -1,0 +1,278 @@
+---
+export interface Props {
+	active?: string;
+}
+
+const navLinks: Array<{ id: string; label: string; href: string }> = [
+	{ id: 'work', label: 'Work', href: '#work' },
+	{ id: 'services', label: 'Services', href: '#services' },
+	{ id: 'pricing', label: 'Pricing', href: '#pricing' },
+	{ id: 'about', label: 'About', href: '#about' },
+	{ id: 'contact', label: 'Contact', href: '#contact' },
+];
+
+const { active = '' } = Astro.props as Props;
+---
+
+<header class="site-header" data-header data-open="false" data-scrolled="false">
+	<div class="container flex items-center justify-between gap-4 py-4">
+		<a
+			class="group flex items-center gap-3 text-brand-dark transition-transform duration-200 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+			href="#top"
+		>
+			<img
+				src="/assets/logo-codario.svg"
+				alt="Codario Labs logo"
+				width="40"
+				height="40"
+				class="h-10 w-10"
+				loading="lazy"
+				decoding="async"
+			/>
+			<span class="font-heading text-lg font-semibold tracking-tight">Codario Labs</span>
+		</a>
+		<nav class="hidden items-center gap-10 lg:flex" aria-label="Primary navigation">
+			{navLinks.map(({ id, label, href }) => (
+				<a
+					class:list={[
+						'group relative text-sm font-medium tracking-tight transition-all duration-200 ease-out text-brand-dark/70 hover:text-brand-cyan focus-visible:text-brand-cyan hover:scale-105 focus-visible:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+						active === id ? 'text-brand-cyan' : '',
+					]}
+					aria-current={active === id ? 'page' : undefined}
+					href={href}
+				>
+					{label}
+					<span
+						class:list={[
+							'absolute inset-x-0 -bottom-2 h-0.5 rounded-full bg-brand-cyan transition-opacity duration-200 ease-out',
+							active === id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+						]}
+						aria-hidden="true"
+					/>
+				</a>
+			))}
+			<a
+				class="btn-primary bg-brand-lime text-brand-dark hover:bg-brand-cyan focus-visible:bg-brand-cyan"
+				href="#contact"
+			>
+				Book a Call
+			</a>
+		</nav>
+		<button
+			type="button"
+			class="relative flex h-11 w-11 items-center justify-center rounded-full border border-brand-dark/10 bg-white text-brand-dark shadow-sm transition-transform duration-200 ease-out hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white lg:hidden"
+			aria-expanded="false"
+			aria-controls="mobile-menu"
+			data-menu-toggle
+		>
+			<span class="sr-only">Toggle navigation</span>
+			<div class="hamburger" aria-hidden="true">
+				<span></span>
+				<span></span>
+				<span></span>
+			</div>
+		</button>
+	</div>
+	<nav
+		class="mobile-menu"
+		id="mobile-menu"
+		aria-label="Mobile navigation"
+		aria-hidden="true"
+	>
+		<ul class="space-y-1">
+			{navLinks.map(({ id, label, href }) => (
+				<li>
+					<a
+						class:list={[
+						'block rounded-xl px-4 py-3 text-base font-medium transition duration-200 ease-out hover:translate-x-1 hover:text-brand-cyan focus-visible:translate-x-1 focus-visible:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white',
+							active === id ? 'text-brand-cyan' : 'text-brand-dark/80',
+						]}
+						aria-current={active === id ? 'page' : undefined}
+						href={href}
+						data-mobile-link
+					>
+						{label}
+					</a>
+				</li>
+			))}
+		</ul>
+		<a
+			class="btn-primary mt-4 w-full bg-brand-lime text-brand-dark hover:bg-brand-cyan focus-visible:bg-brand-cyan"
+			href="#contact"
+		>
+			Book a Call
+		</a>
+	</nav>
+</header>
+
+<style>
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: rgba(255, 255, 255, 0.85);
+		backdrop-filter: blur(14px);
+		border-bottom: 1px solid rgba(10, 37, 64, 0.06);
+		transition:
+			background-color 200ms cubic-bezier(0.16, 1, 0.3, 1),
+			box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1),
+			border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	.site-header[data-scrolled='true'] {
+		background: rgba(255, 255, 255, 0.94);
+		border-color: rgba(10, 37, 64, 0.12);
+		box-shadow: 0 18px 44px -18px rgba(10, 37, 64, 0.28);
+	}
+
+	.mobile-menu {
+		position: absolute;
+		left: 1rem;
+		right: 1rem;
+		top: calc(100% + 0.75rem);
+		background: white;
+		border-radius: 1.125rem;
+		padding: 1.5rem;
+		border: 1px solid rgba(10, 37, 64, 0.08);
+		box-shadow: 0 24px 48px -20px rgba(10, 37, 64, 0.35);
+		opacity: 0;
+		transform: translateY(-12px) scale(0.98);
+		pointer-events: none;
+		visibility: hidden;
+		transition:
+			opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+			visibility 0s linear 220ms;
+	}
+
+	.site-header[data-open='true'] .mobile-menu {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		pointer-events: auto;
+		visibility: visible;
+		transition:
+			opacity 220ms cubic-bezier(0.16, 1, 0.3, 1),
+			transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+			visibility 0s linear 0s;
+	}
+
+	.hamburger {
+		position: relative;
+		width: 22px;
+		height: 16px;
+		display: inline-flex;
+		flex-direction: column;
+		justify-content: space-between;
+	}
+
+	.hamburger span {
+		display: block;
+		height: 2px;
+		width: 100%;
+		border-radius: 999px;
+		background-color: currentColor;
+		transition:
+			transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
+			opacity 200ms cubic-bezier(0.16, 1, 0.3, 1);
+		transform-origin: center;
+	}
+
+	.site-header[data-open='true'] .hamburger span:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+
+	.site-header[data-open='true'] .hamburger span:nth-child(2) {
+		opacity: 0;
+	}
+
+	.site-header[data-open='true'] .hamburger span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
+
+	@media (min-width: 1024px) {
+		.mobile-menu {
+			display: none;
+		}
+	}
+</style>
+
+<script is:inline>
+	const header = document.querySelector('[data-header]');
+	const toggle = header?.querySelector('[data-menu-toggle]');
+	const mobileMenu = header?.querySelector('.mobile-menu');
+	const mobileLinks = header?.querySelectorAll('[data-mobile-link]');
+
+	const closeMenu = () => {
+		if (!header || !toggle || !mobileMenu) return;
+		header.dataset.open = 'false';
+		toggle.setAttribute('aria-expanded', 'false');
+		mobileMenu.setAttribute('aria-hidden', 'true');
+	};
+
+	const openMenu = () => {
+		if (!header || !toggle || !mobileMenu) return;
+		header.dataset.open = 'true';
+		toggle.setAttribute('aria-expanded', 'true');
+		mobileMenu.setAttribute('aria-hidden', 'false');
+	};
+
+	const toggleMenu = () => {
+		if (!header) return;
+		const isOpen = header.dataset.open === 'true';
+		if (isOpen) {
+			closeMenu();
+		} else {
+			openMenu();
+		}
+	};
+
+	toggle?.addEventListener('click', toggleMenu);
+	mobileLinks?.forEach((link) => {
+		link.addEventListener('click', closeMenu);
+	});
+
+	document.addEventListener('click', (event) => {
+		if (!header || header.dataset.open !== 'true') return;
+		if (window.innerWidth >= 1024) return;
+		const target = event.target;
+		if (!(target instanceof Node)) return;
+		if (!header.contains(target)) {
+			closeMenu();
+		}
+	});
+
+	window.addEventListener('keydown', (event) => {
+		if (event.key === 'Escape') {
+			closeMenu();
+			toggle?.focus();
+		}
+	});
+
+	window.addEventListener(
+		'resize',
+		() => {
+			if (window.innerWidth >= 1024) {
+				closeMenu();
+			}
+		},
+		{ passive: true },
+	);
+
+	const handleScroll = () => {
+		if (!header) return;
+		header.dataset.scrolled = window.scrollY > 8 ? 'true' : 'false';
+	};
+
+	handleScroll();
+	window.addEventListener('scroll', handleScroll, { passive: true });
+
+	if ('matchMedia' in window) {
+		const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const motionHandler = () => closeMenu();
+		if (typeof media.addEventListener === 'function') {
+			media.addEventListener('change', motionHandler);
+		} else if (typeof media.addListener === 'function') {
+			media.addListener(motionHandler);
+		}
+	}
+</script>
