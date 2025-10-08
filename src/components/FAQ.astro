@@ -1,0 +1,135 @@
+---
+const faqs = [
+	{
+		question: 'How fast can we launch a new landing page?',
+		answer:
+			'Most landing pages ship in 10–14 days. We start with a positioning workshop, then move into wireframes, design, development, analytics setup, and QA before going live.',
+	},
+	{
+		question: 'Do you work with in-house teams or agencies?',
+		answer:
+			'Both. We often embed with internal product, marketing, or ops teams, and we also collaborate with agencies that need extra engineering or design horsepower for a project.',
+	},
+	{
+		question: 'What tech stack do you use?',
+		answer:
+			'We love Astro, React islands, Tailwind, and TypeScript. We pair them with modern tooling like Vercel, Supabase, Node APIs, and any integrations your ecosystem requires.',
+	},
+	{
+		question: 'Can you support ongoing CRO and growth experiments?',
+		answer:
+			'Yes. Our Care retainer includes a dedicated growth squad running experiments, shipping updates, and reporting on KPIs every sprint.',
+	},
+	{
+		question: 'How do you ensure accessibility?',
+		answer:
+			'We follow WCAG 2.2 AA guidelines, run automated checks, conduct manual audits, and design with semantic structure and focus states baked in from the start.',
+	},
+	{
+		question: 'What if we only need engineering or design?',
+		answer:
+			'We offer focused engagements—design-only, front-end implementation, CMS migrations, and more. Tell us what you need and we’ll scope the right team.',
+	},
+	{
+		question: 'Do you handle analytics and instrumentation?',
+		answer:
+			'Absolutely. We implement analytics (GA4, Mixpanel, Segment), tracking, dashboards, and event schemas so teams can measure every launch.',
+	},
+	{
+		question: 'How do communications run during an engagement?',
+		answer:
+			'You’ll have a dedicated Slack channel, weekly standups, async status updates, and shared docs with timelines, deliverables, and decisions.',
+	},
+	{
+		question: 'What happens post-launch?',
+		answer:
+			'We provide documentation, handoff sessions, and optional retainers for ongoing improvements, monitoring, and new feature support.',
+	},
+	{
+		question: 'Can you integrate with our existing systems?',
+		answer:
+			'Yes. CRM, payment gateways, marketing automation, internal APIs—we scope integrations up front and ensure they’re production-ready before launch.',
+	},
+];
+---
+
+<section class="bg-white py-24" id="faq">
+	<div class="container max-w-4xl">
+		<div class="text-center">
+			<p class="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">FAQ</p>
+			<h2 class="mt-4 text-3xl font-semibold text-brand-dark sm:text-4xl">Answers to common questions about partnering with Codario Labs.</h2>
+			<p class="mt-4 text-sm text-brand-dark/70">
+				Need more details? Reach out via the contact form and we’ll share playbooks, case studies, and timelines suited to your roadmap.
+			</p>
+		</div>
+		<div class="mt-12 divide-y divide-brand-dark/10 rounded-3xl border border-brand-dark/10 bg-brand-gray/50">
+			{faqs.map((faq, index) => {
+				const panelId = `faq-panel-${index}`;
+				const buttonId = `faq-button-${index}`;
+				return (
+					<div class="faq-item">
+						<h3 class="sr-only">{`FAQ ${index + 1}`}</h3>
+						<button
+							class="flex w-full items-center justify-between gap-6 px-6 py-5 text-left text-base font-semibold text-brand-dark transition hover:bg-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40"
+							aria-expanded="false"
+							aria-controls={panelId}
+							id={buttonId}
+							data-faq-trigger
+						>
+							<span>{faq.question}</span>
+							<svg class="h-5 w-5 flex-none text-brand-dark/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+								<path d="M12 5v14" stroke-linecap="round" />
+								<path d="M5 12h14" stroke-linecap="round" />
+							</svg>
+						</button>
+						<div
+							id={panelId}
+							role="region"
+							aria-labelledby={buttonId}
+							class="hidden border-t border-brand-dark/10 bg-white/80 px-6 py-4 text-sm leading-relaxed text-brand-dark/70"
+						>
+							{faq.answer}
+						</div>
+					</div>
+				);
+			})}
+		</div>
+	</div>
+</section>
+
+<script type="module" is:inline>
+	document.addEventListener('astro:page-load', () => {
+		const items = document.querySelectorAll('[data-faq-trigger]');
+		items.forEach((button) => {
+			const panelId = button.getAttribute('aria-controls');
+			const panel = panelId ? document.getElementById(panelId) : null;
+			if (!panel) return;
+
+			button.addEventListener('click', () => {
+				const expanded = button.getAttribute('aria-expanded') === 'true';
+				button.setAttribute('aria-expanded', String(!expanded));
+				panel.classList.toggle('hidden', expanded);
+				if (!expanded) {
+					panel.classList.add('animate-faq');
+				}
+			});
+		});
+	});
+</script>
+
+<style is:global>
+	@keyframes faq-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(-8px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	.animate-faq {
+		animation: faq-reveal 240ms cubic-bezier(0.16, 1, 0.3, 1);
+	}
+</style>

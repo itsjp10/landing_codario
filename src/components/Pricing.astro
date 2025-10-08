@@ -1,0 +1,83 @@
+---
+const plans = [
+	{
+		name: 'Launch',
+		price: 'From $1,200',
+		description: 'Conversion-ready landing pages and sales narratives crafted to launch your next offer quickly.',
+		included: ['Messaging workshop', 'Landing page design & build', 'Analytics + tracking setup', 'QA and performance pass'],
+		addons: ['Paid media creative set', 'Email onboarding sequence', 'A/B testing playbook'],
+		popular: false,
+	},
+	{
+		name: 'Scale',
+		price: 'From $4,800',
+		description: 'Web apps, dashboards, and customer portals with reliable infrastructure and testing workflows.',
+		included: ['Product roadmap & scoping', 'Design system + UX flows', 'Full-stack development & QA', 'CI/CD setup & documentation'],
+		addons: ['API integrations', 'User research sprints', 'CRO experiment package'],
+		popular: true,
+	},
+	{
+		name: 'Care',
+		price: '$690+/mo',
+		description: 'Growth retainers that keep your product shipping, optimized, and insight-driven every month.',
+		included: ['Bi-weekly release cycles', 'Analytics & CRO reviews', 'Support desk & bug fixes', 'Stakeholder reporting'],
+		addons: ['24h priority support', 'Dedicated PM & product ops', 'Marketing automation buildouts'],
+		popular: false,
+	},
+];
+---
+
+<section class="bg-brand-gray py-24" id="pricing">
+	<div class="container space-y-12">
+		<div class="mx-auto max-w-2xl text-center">
+			<p class="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">Pricing</p>
+			<h2 class="mt-4 text-3xl font-semibold text-brand-dark sm:text-4xl">
+				Flexible engagements designed for launches, rebuilds, and continuous growth.
+			</h2>
+			<p class="mt-4 text-sm text-brand-dark/70">
+				Start with a focused engagement or long-term partnership. Every plan includes hands-on collaboration, transparent communication, and tooling you can trust.
+			</p>
+		</div>
+		<div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+			{plans.map((plan) => (
+				<div class={`relative flex flex-col rounded-3xl border bg-white p-8 shadow-soft transition duration-300 ease-brand hover:-translate-y-1 hover:shadow-card ${plan.popular ? 'border-brand-dark' : 'border-brand-dark/10'}`}>
+					{plan.popular && (
+						<span class="absolute right-6 top-6 inline-flex items-center rounded-full bg-brand-dark px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white">
+							Most popular
+						</span>
+					)}
+					<div class="space-y-4">
+						<h3 class="text-2xl font-semibold text-brand-dark">{plan.name}</h3>
+						<p class="text-sm font-semibold uppercase tracking-[0.3em] text-brand-dark/50">{plan.price}</p>
+						<p class="text-sm leading-relaxed text-brand-dark/70">{plan.description}</p>
+					</div>
+					<div class="mt-8 space-y-4">
+						<p class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark/50">What’s included</p>
+						<ul class="space-y-3 text-sm text-brand-dark/80">
+							{plan.included.map((item) => (
+								<li class="flex items-start gap-3" key={item}>
+									<span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-lime"></span>
+									<span>{item}</span>
+								</li>
+							))}
+						</ul>
+					</div>
+					<div class="mt-8 space-y-4">
+						<p class="text-xs font-semibold uppercase tracking-[0.3em] text-brand-dark/50">Add-ons</p>
+						<ul class="space-y-3 text-sm text-brand-dark/70">
+							{plan.addons.map((item) => (
+								<li key={item} class="flex items-start gap-3">
+									<span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-cyan/70"></span>
+									<span>{item}</span>
+								</li>
+							))}
+						</ul>
+					</div>
+					<a class="btn btn-primary mt-8 w-full bg-brand-lime text-brand-dark hover:bg-brand-lime/85" href="#contact">
+						Book a Call
+					</a>
+				</div>
+			))}
+		</div>
+	</div>
+</section>

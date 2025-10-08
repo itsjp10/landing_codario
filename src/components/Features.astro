@@ -1,66 +1,123 @@
 ---
-const features = [
+interface FeatureItem {
+	title: string;
+	tagline: string;
+	description: string;
+	icon: {
+		path: string;
+		viewBox?: string;
+	};
+}
+
+const features: FeatureItem[] = [
 	{
 		title: 'Fast Launch',
-		subtitle: 'Deploy in days',
-		description: 'Sprint-based shipping runs on high-velocity iterations, design systems, and instant QA to deploy conversion-ready experiences in under two weeks.',
-		iconPath:
-			'M4 4h6l2 3h8a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4Zm12 8h6m-6 4h3m-9 0h2',
+		tagline: 'Ship in days, not months.',
+		description:
+			'Sprint-based roadmaps, reusable design systems, and automated QA help us push production-ready experiences in record time.',
+		icon: {
+			path: 'm4.5 16.5 5-5a10 10 0 0 1 10-10l-1.5 5.5 4 4a10 10 0 0 1-10 10Z M9.5 11.5 14 16',
+		},
 	},
 	{
 		title: 'Conversion-First',
-		subtitle: 'Landing pages optimized',
-		description: 'Heatmaps, narrative frameworks, and CRO experiments feed our copy, design, and engineering loops for pages that rely on proof, urgency, and clarity.',
-		iconPath:
-			'M4 20V8l8-4 8 4v12M4 15h16M9 13v7M15 13v7',
+		tagline: 'Landing pages optimized for results.',
+		description:
+			'Every hero, CTA, and flow is backed by research, A/B testing, and narrative frameworks tuned for activation and retention.',
+		icon: {
+			path: 'M3 3v7a2 2 0 0 0 2 2h4l4 4V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2Z M17 8h4v8a2 2 0 0 1-2 2h-4l-4 4v-6',
+		},
 	},
 	{
 		title: 'Scalable Systems',
-		subtitle: 'CRM, dashboards, ops',
-		description: 'Web apps, management systems, and dashboards built with modular architecture, testing pipelines, and security baked into every sprint.',
-		iconPath:
-			'M4 6h16M4 12h16M4 18h16M8 6v12M16 6v12',
+		tagline: 'From dashboards to CRMs.',
+		description:
+			'We architect modular web apps, internal tools, and APIs with CI pipelines so your ops stay reliable as you grow.',
+		icon: {
+			path: 'M5 7h14M5 12h14M5 17h14 M8 7v10M12 7v10M16 7v10',
+		},
 	},
 	{
 		title: 'Clean Code & CI/CD',
-		subtitle: 'Vercel, tests, automation',
-		description: 'Type-safe codebases, preview environments, automated testing, and analytics instrumentation keep your growth loop continuously shipping.',
-		iconPath:
-			'M5 19 10 5l5 14M9 13h6',
+		tagline: 'Vercel, tests, and best practices.',
+		description:
+			'Type-safe stacks, automated tests, preview deploys, and observability ensure every release meets quality and reliability standards.',
+		icon: {
+			path: 'M7 21 12 3l5 18M9.5 14h5',
+		},
 	},
 ];
 ---
 
-<section id="services" class="bg-white py-24">
+<section aria-labelledby="features-heading" class="bg-brand-gray/30 py-24 sm:py-28">
 	<div class="container">
-		<div class="mx-auto max-w-2xl text-center">
-			<h2 class="text-sm font-semibold uppercase tracking-[0.38em] text-brand-dark/50">Capabilities</h2>
-			<p class="mt-4 text-3xl font-semibold text-brand-dark sm:text-4xl">Everything you need to launch, optimize, and grow.</p>
-			<p class="mt-4 text-base text-brand-dark/70">
-				We blend product strategy, UX, and full-stack engineering to deliver digital experiences that your customers will adopt and your team can scale.
+		<header class="mx-auto max-w-2xl text-center">
+			<p class="text-sm font-semibold uppercase tracking-[0.38em] text-brand-dark/55">Capabilities</p>
+			<h2 id="features-heading" class="section-title mt-4">
+				Everything you need to launch, optimize, and grow.
+			</h2>
+			<p class="mt-4 text-base text-brand-dark/70 sm:text-lg">
+				Product strategy, UX, and full-stack engineering come together so your next release ships faster—and keeps improving after launch.
 			</p>
-		</div>
-		<div class="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-			{features.map(({ title, subtitle, description, iconPath }) => (
-				<div class="card group relative overflow-hidden border border-brand-dark/5 bg-white/90 p-8">
-					<span class="absolute right-6 top-6 inline-flex h-12 w-12 items-center justify-center rounded-full bg-brand-cyan/10 text-brand-cyan transition group-hover:scale-105">
-						<svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-							<path d={iconPath} />
-						</svg>
-					</span>
-					<div class="space-y-4 pb-6">
-						<h3 class="text-lg font-semibold text-brand-dark">{title}</h3>
-						<p class="text-sm uppercase tracking-[0.4em] text-brand-dark/50">{subtitle}</p>
-						<p class="text-sm leading-relaxed text-brand-dark/70">{description}</p>
+		</header>
+
+		<div class="mt-16 grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
+			{features.map(({ title, tagline, description, icon }) => (
+				<article class="feature-card group relative overflow-hidden rounded-3xl border border-brand-dark/8 bg-white/90 p-8 shadow-sm transition duration-300 ease-out">
+					<div class="relative z-10 space-y-4">
+						<span class="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-cyan/10 text-brand-cyan transition-all duration-300 ease-out group-hover:bg-brand-cyan/15 group-hover:text-brand-dark">
+							<svg
+								class="h-6 w-6"
+								viewBox={icon.viewBox ?? '0 0 24 24'}
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.8"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"
+							>
+								<path d={icon.path} />
+							</svg>
+						</span>
+						<h3 class="font-heading text-xl font-semibold text-brand-dark">
+							{title}
+						</h3>
+						<p class="text-sm font-medium uppercase tracking-[0.32em] text-brand-dark/55">
+							{tagline}
+						</p>
+						<p class="text-sm leading-relaxed text-brand-dark/75">
+							{description}
+						</p>
 					</div>
-					<div class="flex items-center gap-2 text-sm font-semibold text-brand-dark/70 transition group-hover:translate-x-1">
-						<span>See how it works</span>
-						<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-							<path d="m9 18 6-6-6-6" stroke-linecap="round" stroke-linejoin="round" />
-						</svg>
-					</div>
-				</div>
+					<div class="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-cyan/0 via-brand-cyan/0 to-brand-lime/0 opacity-0 transition duration-300 ease-out group-hover:opacity-60"></div>
+				</article>
 			))}
 		</div>
 	</div>
 </section>
+
+<style>
+	.feature-card {
+		transform: translateY(0) rotate(0deg);
+	}
+
+	.feature-card:hover,
+	.feature-card:focus-within {
+		transform: translateY(-10px) rotate(-0.6deg);
+		box-shadow: 0 28px 46px -24px rgba(10, 37, 64, 0.3);
+	}
+
+	.feature-card:nth-child(2n):hover,
+	.feature-card:nth-child(2n):focus-within {
+		transform: translateY(-10px) rotate(0.6deg);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.feature-card,
+		.feature-card:hover,
+		.feature-card:focus-within {
+			transform: none;
+			transition-duration: 0ms;
+		}
+	}
+</style>

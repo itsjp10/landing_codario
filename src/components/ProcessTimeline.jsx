@@ -85,7 +85,7 @@ const ProcessTimeline = () => {
 	}, []);
 
 	return (
-		<section className="bg-brand-gray/80 py-24" id="process">
+		<section className="bg-brand-gray/80 py-24" id="about">
 			<div className="container">
 				<div className="mx-auto max-w-2xl text-center">
 					<p className="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">Process</p>

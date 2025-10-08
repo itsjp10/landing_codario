@@ -1,0 +1,208 @@
+<section class="bg-white py-24" id="contact">
+	<div class="container grid gap-12 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,0.8fr)] lg:items-start">
+		<div class="space-y-6">
+			<p class="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">Contact</p>
+			<h2 class="text-3xl font-semibold text-brand-dark sm:text-4xl">
+				Let’s map your next release.
+			</h2>
+			<p class="text-sm text-brand-dark/70">
+				Share your roadmap, goals, and timeline. We’ll respond within one business day with availability, relevant work, and a proposal outline.
+			</p>
+			<ul class="space-y-4 text-sm text-brand-dark/75">
+				<li class="flex items-start gap-3">
+					<span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-lime"></span>
+					<span>Availability for new engagements starting within the next 6 weeks.</span>
+				</li>
+				<li class="flex items-start gap-3">
+					<span class="mt-1 h-2.5 w-2.5 rounded-full bg-brand-cyan"></span>
+					<span>Discovery calls include a complimentary audit of your current experience.</span>
+				</li>
+			</ul>
+			<div class="rounded-3xl border border-brand-dark/10 bg-brand-gray/60 p-6 text-sm text-brand-dark/70">
+				<p class="font-semibold text-brand-dark">Prefer email?</p>
+				<p>hello@codariolabs.com</p>
+			</div>
+		</div>
+
+		<form
+			id="contact-form"
+			class="card relative overflow-hidden border border-brand-dark/10 bg-white p-8"
+			method="POST"
+			action="/api/form"
+			novalidate
+		>
+			<div class="absolute inset-0 pointer-events-none" aria-hidden="true" data-confetti-root></div>
+			<fieldset class="space-y-6">
+				<div>
+					<label class="mb-2 block text-sm font-semibold text-brand-dark" for="name">
+						Name
+					</label>
+					<input
+						class="w-full rounded-2xl border border-brand-dark/10 bg-brand-gray/70 px-4 py-3 text-sm text-brand-dark transition focus:border-brand-dark focus:outline-none focus:ring-4 focus:ring-brand-cyan/40"
+						type="text"
+						id="name"
+						name="name"
+						required
+						minlength="2"
+						autocomplete="name"
+					/>
+				</div>
+				<div class="grid gap-6 sm:grid-cols-2">
+					<div>
+						<label class="mb-2 block text-sm font-semibold text-brand-dark" for="email">
+							Email
+						</label>
+						<input
+							class="w-full rounded-2xl border border-brand-dark/10 bg-brand-gray/70 px-4 py-3 text-sm text-brand-dark transition focus:border-brand-dark focus:outline-none focus:ring-4 focus:ring-brand-cyan/40"
+							type="email"
+							id="email"
+							name="email"
+							required
+							autocomplete="email"
+						/>
+					</div>
+					<div>
+						<label class="mb-2 block text-sm font-semibold text-brand-dark" for="company">
+							Company
+						</label>
+						<input
+							class="w-full rounded-2xl border border-brand-dark/10 bg-brand-gray/70 px-4 py-3 text-sm text-brand-dark transition focus:border-brand-dark focus:outline-none focus:ring-4 focus:ring-brand-cyan/40"
+							type="text"
+							id="company"
+							name="company"
+							required
+							autocomplete="organization"
+						/>
+					</div>
+				</div>
+				<div>
+					<label class="mb-2 block text-sm font-semibold text-brand-dark" for="budget">
+						Budget Range
+					</label>
+					<select
+						class="w-full appearance-none rounded-2xl border border-brand-dark/10 bg-brand-gray/70 px-4 py-3 text-sm text-brand-dark transition focus:border-brand-dark focus:outline-none focus:ring-4 focus:ring-brand-cyan/40"
+						id="budget"
+						name="budget"
+						required
+					>
+						<option value="">Select a range</option>
+						<option value="under-5k">Under $5,000</option>
+						<option value="5k-15k">$5,000 – $15,000</option>
+						<option value="15k-30k">$15,000 – $30,000</option>
+						<option value="30k-plus">$30,000+</option>
+					</select>
+				</div>
+				<div>
+					<label class="mb-2 block text-sm font-semibold text-brand-dark" for="message">
+						Project Details
+					</label>
+					<textarea
+						class="h-36 w-full rounded-2xl border border-brand-dark/10 bg-brand-gray/70 px-4 py-3 text-sm text-brand-dark transition focus:border-brand-dark focus:outline-none focus:ring-4 focus:ring-brand-cyan/40"
+						id="message"
+						name="message"
+						required
+						minlength="20"
+					></textarea>
+				</div>
+				<div class="sr-only" aria-hidden="true">
+					<label for="company_website">Company website</label>
+					<input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off" />
+				</div>
+			</fieldset>
+			<div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+				<button class="btn btn-primary bg-brand-dark text-white hover:bg-brand-dark/90" type="submit">
+					Send Message
+				</button>
+				<p class="text-xs text-brand-dark/50">We respond within one business day. No spam, ever.</p>
+			</div>
+			<div class="mt-4 text-sm" aria-live="polite" data-form-feedback></div>
+		</form>
+	</div>
+</section>
+
+<script type="module" is:inline>
+	const form = document.getElementById('contact-form');
+	if (form) {
+		const feedback = form.querySelector('[data-form-feedback]');
+		const confettiRoot = form.querySelector('[data-confetti-root]');
+		const reducedMotion = document.documentElement.dataset.reducedMotion === 'true';
+
+		const renderConfetti = () => {
+			if (!confettiRoot || reducedMotion) return;
+			confettiRoot.innerHTML = '';
+			const pieceCount = 28;
+			for (let i = 0; i < pieceCount; i += 1) {
+				const piece = document.createElement('span');
+				piece.className = 'confetti-piece';
+				piece.style.setProperty('--x', `${Math.random() * 100}%`);
+				piece.style.setProperty('--delay', `${Math.random() * 0.4}s`);
+				piece.style.setProperty('--rotation', `${Math.random() * 180}deg`);
+				confettiRoot.appendChild(piece);
+			}
+			setTimeout(() => {
+				confettiRoot.innerHTML = '';
+			}, 1800);
+		};
+
+		form.addEventListener('submit', async (event) => {
+			event.preventDefault();
+			const formData = new FormData(form);
+
+			if (formData.get('company_website')) {
+				return;
+			}
+
+			try {
+				const response = await fetch(form.action, {
+					method: 'POST',
+					body: formData,
+				});
+
+				if (response.ok) {
+					form.reset();
+					if (feedback) {
+						feedback.textContent = 'Thanks! Your message is on its way. We’ll reach out within one business day.';
+						feedback.className = 'text-sm text-brand-dark/80 font-semibold';
+					}
+					renderConfetti();
+				} else {
+					throw new Error('Request failed');
+				}
+			} catch (error) {
+				if (feedback) {
+					feedback.textContent = 'Something went wrong. Please email hello@codariolabs.com and we’ll take care of you.';
+					feedback.className = 'text-sm text-red-600';
+				}
+			}
+		});
+	}
+</script>
+
+<style is:global>
+	.confetti-piece {
+		position: absolute;
+		inset-inline-start: var(--x);
+		top: 0;
+		width: 10px;
+		height: 18px;
+		border-radius: 999px;
+		background: linear-gradient(135deg, #3bafda, #9be564);
+		animation: confetti-fall 1.4s ease-out var(--delay) forwards;
+		transform: rotate(var(--rotation));
+		opacity: 0;
+	}
+
+	@keyframes confetti-fall {
+		0% {
+			transform: translate3d(-50%, -20px, 0) rotate(var(--rotation));
+			opacity: 0;
+		}
+		20% {
+			opacity: 1;
+		}
+		100% {
+			transform: translate3d(-50%, 180px, 0) rotate(calc(var(--rotation) + 60deg));
+			opacity: 0;
+		}
+	}
+</style>
