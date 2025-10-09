@@ -11,7 +11,7 @@ interface Props {
 }
 
 const {
-	title = 'Codario Labs - Web that launches and scales',
+	title = 'Codario Labs — Web that launches and scales',
 	description,
 	ogImage,
 	pageType = 'website',
@@ -82,12 +82,34 @@ const canonical =
 		>
 			Skip to content
 		</a>
-		<main id="main-content" class="min-h-screen bg-white">
-			<slot />
-		</main>
-		<script is:inline>
-			const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			document.documentElement.dataset.reducedMotion = prefersReducedMotion ? 'true' : 'false';
+		<slot />
+		<script type="module" is:inline>
+			const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+			const setReducedMotion = (event) => {
+				document.documentElement.dataset.reducedMotion = event.matches ? 'true' : 'false';
+			};
+			setReducedMotion(mq);
+			if (mq.addEventListener) {
+				mq.addEventListener('change', setReducedMotion);
+			} else if (mq.addListener) {
+				mq.addListener(setReducedMotion);
+			}
+
+			const GA_ID = import.meta.env.PUBLIC_GA_ID || 'G-XXXXXXX';
+			if (import.meta.env.PROD && GA_ID && GA_ID !== 'G-XXXXXXX') {
+				window.dataLayer = window.dataLayer || [];
+				function gtag() {
+					window.dataLayer.push(arguments);
+				}
+				gtag('js', new Date());
+				gtag('config', GA_ID);
+				const script = document.createElement('script');
+				script.async = true;
+				script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+				document.head.appendChild(script);
+			} else {
+				console.info('GA4 placeholder active. Set PUBLIC_GA_ID to enable analytics.');
+			}
 		</script>
 	</body>
 </html>

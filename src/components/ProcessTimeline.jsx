@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-const steps = [
+const defaultSteps = [
 	{
 		title: 'Discover',
 		description:
@@ -30,9 +30,15 @@ const steps = [
 	},
 ];
 
-const ProcessTimeline = () => {
+const ProcessTimeline = ({ steps = defaultSteps }) => {
 	const containerRef = useRef(null);
 	const lineRef = useRef(null);
+	const itemsRef = useRef([]);
+
+	const reducedMotionQuery = useMemo(
+		() => (typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null),
+		[],
+	);
 
 	useEffect(() => {
 		if (!gsap.core.globals().ScrollTrigger) {
@@ -41,39 +47,44 @@ const ProcessTimeline = () => {
 	}, []);
 
 	useEffect(() => {
-		const reducedMotion = document.documentElement.dataset.reducedMotion === 'true';
-		if (reducedMotion || !containerRef.current) return undefined;
+		if (!containerRef.current || reducedMotionQuery?.matches) {
+			if (lineRef.current) {
+				lineRef.current.style.transform = 'scaleY(1)';
+			}
+			return undefined;
+		}
 
 		const ctx = gsap.context(() => {
 			if (lineRef.current) {
 				gsap.fromTo(
 					lineRef.current,
-					{ height: '0%' },
+					{ scaleY: 0 },
 					{
-						height: '100%',
+						scaleY: 1,
+						transformOrigin: 'top center',
+						ease: 'none',
 						scrollTrigger: {
 							trigger: containerRef.current,
 							start: 'top 75%',
-							end: 'bottom 60%',
+							end: 'bottom 40%',
 							scrub: true,
 						},
-						ease: 'linear',
 					},
 				);
 			}
 
-			const items = gsap.utils.toArray('[data-step]');
-			items.forEach((item) => {
+			itemsRef.current.forEach((node) => {
+				if (!node) return;
 				gsap.fromTo(
-					item,
-					{ opacity: 0, y: 40 },
+					node,
+					{ autoAlpha: 0, y: 48 },
 					{
-						opacity: 1,
+						autoAlpha: 1,
 						y: 0,
 						duration: 0.6,
 						ease: 'power3.out',
 						scrollTrigger: {
-							trigger: item,
+							trigger: node,
 							start: 'top 80%',
 						},
 					},
@@ -82,10 +93,45 @@ const ProcessTimeline = () => {
 		}, containerRef);
 
 		return () => ctx.revert();
-	}, []);
+	}, [steps, reducedMotionQuery]);
+
+	useEffect(() => {
+		if (!reducedMotionQuery) return undefined;
+		const handler = (event) => {
+			if (!containerRef.current) return;
+			if (event.matches) {
+				ScrollTrigger.getAll()
+					.filter((trigger) => containerRef.current.contains(trigger.trigger))
+					.forEach((trigger) => trigger.kill());
+				if (lineRef.current) {
+					lineRef.current.style.transform = 'scaleY(1)';
+				}
+				itemsRef.current.forEach((node) => {
+					if (node) {
+						node.style.opacity = '1';
+						node.style.transform = 'translateY(0)';
+					}
+				});
+			}
+		};
+
+		if (reducedMotionQuery.addEventListener) {
+			reducedMotionQuery.addEventListener('change', handler);
+		} else if (reducedMotionQuery.addListener) {
+			reducedMotionQuery.addListener(handler);
+		}
+
+		return () => {
+			if (reducedMotionQuery.removeEventListener) {
+				reducedMotionQuery.removeEventListener('change', handler);
+			} else if (reducedMotionQuery.removeListener) {
+				reducedMotionQuery.removeListener(handler);
+			}
+		};
+	}, [reducedMotionQuery]);
 
 	return (
-		<section className="bg-brand-gray/80 py-24" id="about">
+		<section className="bg-brand-gray/80 py-24" id="process">
 			<div className="container">
 				<div className="mx-auto max-w-2xl text-center">
 					<p className="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">Process</p>
@@ -93,20 +139,31 @@ const ProcessTimeline = () => {
 						Clarity from discovery call to production launch.
 					</h2>
 					<p className="mt-4 text-sm text-brand-dark/70">
-						Sprints, rituals, and transparent communication keep progress visible. The timeline below animates as you scroll to map our end-to-end partnership.
+						Sprints, rituals, and transparent communication keep progress visible. Follow each milestone as the timeline
+						comes to life while you scroll.
 					</p>
 				</div>
+
 				<div ref={containerRef} className="relative mt-16 grid gap-12 md:grid-cols-[auto_1fr]">
 					<div className="relative mx-auto hidden w-px md:block">
-						<div className="absolute inset-0 rounded-full bg-brand-dark/10"></div>
-						<div ref={lineRef} className="absolute inset-x-0 top-0 origin-top rounded-full bg-brand-cyan"></div>
+						<div className="absolute inset-0 rounded-full bg-brand-dark/10" aria-hidden="true" />
+						<div
+							ref={lineRef}
+							className="absolute inset-x-0 top-0 h-full rounded-full bg-brand-cyan"
+							style={{ transform: 'scaleY(0)', transformOrigin: 'top center' }}
+							aria-hidden="true"
+						/>
 					</div>
+
 					<ol className="space-y-12">
 						{steps.map((step, index) => (
 							<li
-								key={step.title}
+								key={`${step.title}-${index}`}
+								ref={(node) => {
+									itemsRef.current[index] = node;
+								}}
 								data-step
-								className="relative rounded-3xl border border-brand-dark/10 bg-white/90 p-8 shadow-soft"
+								className="relative rounded-3xl border border-brand-dark/10 bg-white/90 p-8 shadow-soft transition will-change-transform"
 							>
 								<div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
 									<div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.4em] text-brand-dark/50">
