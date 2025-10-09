@@ -15,4 +15,9 @@ export default defineConfig({
 		sitemap(),
 	],
 	output: 'static',
+	vite: {
+		server: {
+			allowedHosts: ['32183accc65b.ngrok-free.app'],
+		},
+	},
 });

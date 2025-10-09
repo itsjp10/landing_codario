@@ -4,14 +4,14 @@ export interface Props {
 }
 
 const navLinks: Array<{ id: string; label: string; href: string }> = [
-	{ id: 'work', label: 'Work', href: '#work' },
-	{ id: 'services', label: 'Services', href: '#services' },
-	{ id: 'pricing', label: 'Pricing', href: '#pricing' },
-	{ id: 'about', label: 'About', href: '#about' },
-	{ id: 'contact', label: 'Contact', href: '#contact' },
+	{ id: "work", label: "Work", href: "#work" },
+	{ id: "services", label: "Services", href: "#services" },
+	{ id: "pricing", label: "Pricing", href: "#pricing" },
+	{ id: "about", label: "About", href: "#about" },
+	{ id: "contact", label: "Contact", href: "#contact" },
 ];
 
-const { active = '' } = Astro.props as Props;
+const { active = "" } = Astro.props as Props;
 ---
 
 <header class="site-header" data-header data-open="false" data-scrolled="false">
@@ -23,7 +23,7 @@ const { active = '' } = Astro.props as Props;
 			<img
 				src="/assets/logo-codario.png"
 				alt="Codario Labs logo"
-				class="h-10 w-10 scale-[2.5]" 
+				class="h-10 w-10 scale-[2.5]"
 				loading="lazy"
 				decoding="async"
 			/>
@@ -33,29 +33,37 @@ const { active = '' } = Astro.props as Props;
 			</span>
 			<span class="sr-only">Codario Labs</span>
 		</a>
-		<nav class="hidden items-center gap-10 lg:flex" aria-label="Primary navigation">
-			{navLinks.map(({ id, label, href }) => (
-				<a
-					class:list={[
-						'group relative text-sm font-medium tracking-tight transition-all duration-200 ease-out text-brand-dark/70 hover:text-brand-cyan focus-visible:text-brand-cyan hover:scale-105 focus-visible:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white',
-						active === id ? 'text-brand-cyan' : '',
-					]}
-					aria-current={active === id ? 'page' : undefined}
-					href={href}
-				>
-					{label}
-					<span
+		<nav
+			class="hidden items-center gap-10 lg:flex"
+			aria-label="Primary navigation"
+		>
+			{
+				navLinks.map(({ id, label, href }) => (
+					<a
 						class:list={[
-							'absolute inset-x-0 -bottom-2 h-0.5 rounded-full bg-brand-cyan transition-opacity duration-200 ease-out',
-							active === id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
+							"group relative text-sm font-medium tracking-tight transition-all duration-200 ease-out text-brand-dark/70 hover:text-brand-cyan focus-visible:text-brand-cyan hover:scale-105 focus-visible:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+							active === id ? "text-brand-cyan" : "",
 						]}
-						aria-hidden="true"
-					/>
-				</a>
-			))}
+						aria-current={active === id ? "page" : undefined}
+						href={href}
+					>
+						{label}
+						<span
+							class:list={[
+								"absolute inset-x-0 -bottom-2 h-0.5 rounded-full bg-brand-cyan transition-opacity duration-200 ease-out",
+								active === id
+									? "opacity-100"
+									: "opacity-0 group-hover:opacity-100",
+							]}
+							aria-hidden="true"
+						/>
+					</a>
+				))
+			}
 			<a
 				class="btn-primary bg-brand-lime text-brand-dark hover:bg-brand-cyan focus-visible:bg-brand-cyan"
-				href="#contact"
+				href="https://calendly.com/jalvarezp-codariolabs/30min"
+				target="_blank"
 			>
 				Book a Call
 			</a>
@@ -82,25 +90,30 @@ const { active = '' } = Astro.props as Props;
 		aria-hidden="true"
 	>
 		<ul class="space-y-1">
-			{navLinks.map(({ id, label, href }) => (
-				<li>
-					<a
-						class:list={[
-						'block rounded-xl px-4 py-3 text-base font-medium transition duration-200 ease-out hover:translate-x-1 hover:text-brand-cyan focus-visible:translate-x-1 focus-visible:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white',
-							active === id ? 'text-brand-cyan' : 'text-brand-dark/80',
-						]}
-						aria-current={active === id ? 'page' : undefined}
-						href={href}
-						data-mobile-link
-					>
-						{label}
-					</a>
-				</li>
-			))}
+			{
+				navLinks.map(({ id, label, href }) => (
+					<li>
+						<a
+							class:list={[
+								"block rounded-xl px-4 py-3 text-base font-medium transition duration-200 ease-out hover:translate-x-1 hover:text-brand-cyan focus-visible:translate-x-1 focus-visible:text-brand-cyan focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white",
+								active === id
+									? "text-brand-cyan"
+									: "text-brand-dark/80",
+							]}
+							aria-current={active === id ? "page" : undefined}
+							href={href}
+							data-mobile-link
+						>
+							{label}
+						</a>
+					</li>
+				))
+			}
 		</ul>
 		<a
 			class="btn-primary mt-4 w-full bg-brand-lime text-brand-dark hover:bg-brand-cyan focus-visible:bg-brand-cyan"
-			href="#contact"
+			href="https://calendly.com/jalvarezp-codariolabs/30min"
+			target="_blank"
 		>
 			Book a Call
 		</a>
@@ -121,7 +134,7 @@ const { active = '' } = Astro.props as Props;
 			border-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 	}
 
-	.site-header[data-scrolled='true'] {
+	.site-header[data-scrolled="true"] {
 		background: rgba(255, 255, 255, 0.94);
 		border-color: rgba(10, 37, 64, 0.12);
 		box-shadow: 0 18px 44px -18px rgba(10, 37, 64, 0.28);
@@ -147,7 +160,7 @@ const { active = '' } = Astro.props as Props;
 			visibility 0s linear 220ms;
 	}
 
-	.site-header[data-open='true'] .mobile-menu {
+	.site-header[data-open="true"] .mobile-menu {
 		opacity: 1;
 		transform: translateY(0) scale(1);
 		pointer-events: auto;
@@ -179,44 +192,55 @@ const { active = '' } = Astro.props as Props;
 		transform-origin: center;
 	}
 
-	.site-header[data-open='true'] .hamburger span:nth-child(1) {
+	.site-header[data-open="true"] .hamburger span:nth-child(1) {
 		transform: translateY(7px) rotate(45deg);
 	}
 
-	.site-header[data-open='true'] .hamburger span:nth-child(2) {
+	.site-header[data-open="true"] .hamburger span:nth-child(2) {
 		opacity: 0;
 	}
 
-.site-header[data-open='true'] .hamburger span:nth-child(3) {
-	transform: translateY(-7px) rotate(-45deg);
-}
+	.site-header[data-open="true"] .hamburger span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
+	}
 
-.logo-wordmark {
-	display: flex;
-	flex-direction: column;
-	line-height: 0.9;
-	letter-spacing: -0.01em;
-}
+	.logo-wordmark {
+		display: flex;
+		flex-direction: column;
+		line-height: 0.9;
+		letter-spacing: -0.01em;
+	}
 
-.logo-wordmark__primary {
-	font-family: var(--font-display, 'Poppins', system-ui, -apple-system, sans-serif);
-	font-weight: 700;
-	font-size: 1.125rem;
-	background: linear-gradient(90deg, #3BAFDA 0%, #0A2540 100%);
-	background-clip: text;
-	-webkit-background-clip: text;
-	color: transparent;
-	-webkit-text-fill-color: transparent;
-}
+	.logo-wordmark__primary {
+		font-family: var(
+			--font-display,
+			"Poppins",
+			system-ui,
+			-apple-system,
+			sans-serif
+		);
+		font-weight: 700;
+		font-size: 1.125rem;
+		background: linear-gradient(90deg, #3bafda 0%, #0a2540 100%);
+		background-clip: text;
+		-webkit-background-clip: text;
+		color: transparent;
+		-webkit-text-fill-color: transparent;
+	}
 
-.logo-wordmark__secondary {
-	font-family: var(--font-display, 'Poppins', system-ui, -apple-system, sans-serif);
-	font-weight: 600;
-	font-size: 0.85rem;
-	color: #3BAFDA;
-	margin-top: 0.2rem;
-
-}
+	.logo-wordmark__secondary {
+		font-family: var(
+			--font-display,
+			"Poppins",
+			system-ui,
+			-apple-system,
+			sans-serif
+		);
+		font-weight: 600;
+		font-size: 0.85rem;
+		color: #3bafda;
+		margin-top: 0.2rem;
+	}
 
 	@media (min-width: 1024px) {
 		.mobile-menu {
@@ -226,28 +250,28 @@ const { active = '' } = Astro.props as Props;
 </style>
 
 <script is:inline>
-	const header = document.querySelector('[data-header]');
-	const toggle = header?.querySelector('[data-menu-toggle]');
-	const mobileMenu = header?.querySelector('.mobile-menu');
-	const mobileLinks = header?.querySelectorAll('[data-mobile-link]');
+	const header = document.querySelector("[data-header]");
+	const toggle = header?.querySelector("[data-menu-toggle]");
+	const mobileMenu = header?.querySelector(".mobile-menu");
+	const mobileLinks = header?.querySelectorAll("[data-mobile-link]");
 
 	const closeMenu = () => {
 		if (!header || !toggle || !mobileMenu) return;
-		header.dataset.open = 'false';
-		toggle.setAttribute('aria-expanded', 'false');
-		mobileMenu.setAttribute('aria-hidden', 'true');
+		header.dataset.open = "false";
+		toggle.setAttribute("aria-expanded", "false");
+		mobileMenu.setAttribute("aria-hidden", "true");
 	};
 
 	const openMenu = () => {
 		if (!header || !toggle || !mobileMenu) return;
-		header.dataset.open = 'true';
-		toggle.setAttribute('aria-expanded', 'true');
-		mobileMenu.setAttribute('aria-hidden', 'false');
+		header.dataset.open = "true";
+		toggle.setAttribute("aria-expanded", "true");
+		mobileMenu.setAttribute("aria-hidden", "false");
 	};
 
 	const toggleMenu = () => {
 		if (!header) return;
-		const isOpen = header.dataset.open === 'true';
+		const isOpen = header.dataset.open === "true";
 		if (isOpen) {
 			closeMenu();
 		} else {
@@ -255,13 +279,13 @@ const { active = '' } = Astro.props as Props;
 		}
 	};
 
-	toggle?.addEventListener('click', toggleMenu);
+	toggle?.addEventListener("click", toggleMenu);
 	mobileLinks?.forEach((link) => {
-		link.addEventListener('click', closeMenu);
+		link.addEventListener("click", closeMenu);
 	});
 
-	document.addEventListener('click', (event) => {
-		if (!header || header.dataset.open !== 'true') return;
+	document.addEventListener("click", (event) => {
+		if (!header || header.dataset.open !== "true") return;
 		if (window.innerWidth >= 1024) return;
 		const target = event.target;
 		if (!(target instanceof Node)) return;
@@ -270,15 +294,15 @@ const { active = '' } = Astro.props as Props;
 		}
 	});
 
-	window.addEventListener('keydown', (event) => {
-		if (event.key === 'Escape') {
+	window.addEventListener("keydown", (event) => {
+		if (event.key === "Escape") {
 			closeMenu();
 			toggle?.focus();
 		}
 	});
 
 	window.addEventListener(
-		'resize',
+		"resize",
 		() => {
 			if (window.innerWidth >= 1024) {
 				closeMenu();
@@ -289,18 +313,18 @@ const { active = '' } = Astro.props as Props;
 
 	const handleScroll = () => {
 		if (!header) return;
-		header.dataset.scrolled = window.scrollY > 8 ? 'true' : 'false';
+		header.dataset.scrolled = window.scrollY > 8 ? "true" : "false";
 	};
 
 	handleScroll();
-	window.addEventListener('scroll', handleScroll, { passive: true });
+	window.addEventListener("scroll", handleScroll, { passive: true });
 
-	if ('matchMedia' in window) {
-		const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+	if ("matchMedia" in window) {
+		const media = window.matchMedia("(prefers-reduced-motion: reduce)");
 		const motionHandler = () => closeMenu();
-		if (typeof media.addEventListener === 'function') {
-			media.addEventListener('change', motionHandler);
-		} else if (typeof media.addListener === 'function') {
+		if (typeof media.addEventListener === "function") {
+			media.addEventListener("change", motionHandler);
+		} else if (typeof media.addListener === "function") {
 			media.addListener(motionHandler);
 		}
 	}

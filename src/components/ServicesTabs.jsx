@@ -72,31 +72,32 @@ const ServicesTabs = () => {
 	useEffect(() => {
 		if (!panelsRef.current) return;
 		if (prefersReducedMotion?.matches) return;
+		if (previousId.current === activeId) return;
 
-	const previousPanel = panelsRef.current.querySelector(`[data-panel="${previousId.current}"]`);
-	const currentPanel = panelsRef.current.querySelector(`[data-panel="${activeId}"]`);
+		const previousPanel = panelsRef.current.querySelector(`[data-panel="${previousId.current}"]`);
+		const currentPanel = panelsRef.current.querySelector(`[data-panel="${activeId}"]`);
 
-	if (!previousPanel || !currentPanel) return;
+		if (!previousPanel || !currentPanel) return;
 
-	const timeline = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.45 } });
+		const timeline = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.45 } });
 
-	timeline
-		.to(previousPanel, { autoAlpha: 0 }, 0)
-		.set(previousPanel, { display: 'none' })
-		.fromTo(
-			currentPanel,
-			{ autoAlpha: 0, display: 'grid' },
-			{ autoAlpha: 1 },
-			0
-		)
-		.fromTo(
-			currentPanel.querySelectorAll('[data-panel-stagger]'),
-			{ autoAlpha: 0, y: 16 },
-			{ autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.4 },
-			0.05,
-		);
+		timeline
+			.to(previousPanel, { autoAlpha: 0 }, 0)
+			.set(previousPanel, { display: 'none' })
+			.fromTo(
+				currentPanel,
+				{ autoAlpha: 0, display: 'grid' },
+				{ autoAlpha: 1 },
+				0,
+			)
+			.fromTo(
+				currentPanel.querySelectorAll('[data-panel-stagger]'),
+				{ autoAlpha: 0, y: 16 },
+				{ autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.4 },
+				0.05,
+			);
 
-	return () => timeline.kill();
+		return () => timeline.kill();
 	}, [activeId, prefersReducedMotion]);
 
 	useEffect(() => {
