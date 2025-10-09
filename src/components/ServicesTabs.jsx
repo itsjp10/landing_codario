@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+﻿import { useEffect, useMemo, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 
 const tabs = [
@@ -73,32 +73,30 @@ const ServicesTabs = () => {
 		if (!panelsRef.current) return;
 		if (prefersReducedMotion?.matches) return;
 
-		const previousPanel = panelsRef.current.querySelector(`[data-panel="${previousId.current}"]`);
-		const currentPanel = panelsRef.current.querySelector(`[data-panel="${activeId}"]`);
+	const previousPanel = panelsRef.current.querySelector(`[data-panel="${previousId.current}"]`);
+	const currentPanel = panelsRef.current.querySelector(`[data-panel="${activeId}"]`);
 
-		if (!previousPanel || !currentPanel) return;
+	if (!previousPanel || !currentPanel) return;
 
-		const timeline = gsap.timeline({
-			defaults: { ease: 'power3.out', duration: 0.6 },
-		});
+	const timeline = gsap.timeline({ defaults: { ease: 'power2.out', duration: 0.45 } });
 
-		timeline
-			.to(previousPanel, { autoAlpha: 0, xPercent: -8, scale: 0.98 }, 0)
-			.set(previousPanel, { display: 'none' })
-			.fromTo(
-				currentPanel,
-				{ autoAlpha: 0, xPercent: 8, scale: 0.98, display: 'grid' },
-				{ autoAlpha: 1, xPercent: 0, scale: 1, duration: 0.65 },
-				0.05,
-			)
-			.fromTo(
-				currentPanel.querySelectorAll('[data-panel-stagger]'),
-				{ autoAlpha: 0, y: 24 },
-				{ autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.5 },
-				0.15,
-			);
+	timeline
+		.to(previousPanel, { autoAlpha: 0 }, 0)
+		.set(previousPanel, { display: 'none' })
+		.fromTo(
+			currentPanel,
+			{ autoAlpha: 0, display: 'grid' },
+			{ autoAlpha: 1 },
+			0
+		)
+		.fromTo(
+			currentPanel.querySelectorAll('[data-panel-stagger]'),
+			{ autoAlpha: 0, y: 16 },
+			{ autoAlpha: 1, y: 0, stagger: 0.06, duration: 0.4 },
+			0.05,
+		);
 
-		return () => timeline.kill();
+	return () => timeline.kill();
 	}, [activeId, prefersReducedMotion]);
 
 	useEffect(() => {
@@ -152,49 +150,6 @@ const ServicesTabs = () => {
 						Choose from fast-moving launches, full product builds, or ongoing retainers. Each track pairs strategy with
 						design and engineering rituals that keep releases shipping.
 					</p>
-					<div role="tablist" aria-label="Codario Labs services" className="space-y-3">
-						{tabs.map((tab, index) => {
-							const selected = tab.id === activeId;
-							return (
-								<button
-									key={tab.id}
-									type="button"
-									role="tab"
-									id={`${tab.id}-tab`}
-									aria-selected={selected}
-									aria-controls={`${tab.id}-panel`}
-									onClick={() => handleTabClick(tab.id)}
-									onKeyDown={(event) => handleKeyDown(event, index)}
-									ref={(node) => {
-										if (node) {
-											buttonsRef.current[tab.id] = node;
-										}
-									}}
-									className={`flex w-full items-center justify-between rounded-3xl border px-5 py-4 text-left transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 ${
-										selected
-											? 'border-brand-dark bg-white text-brand-dark shadow-lg shadow-brand-dark/10'
-											: 'border-transparent bg-white/50 text-brand-dark/60 hover:text-brand-dark'
-									}`}
-								>
-									<div>
-										<p className="font-heading text-lg font-semibold">{tab.label}</p>
-										<p className="text-xs uppercase tracking-[0.3em] text-brand-dark/50">{tab.tagline}</p>
-									</div>
-									<span
-										className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition ${
-											selected ? 'bg-brand-dark text-white' : 'bg-brand-dark/8 text-brand-dark/50'
-										}`}
-										aria-hidden="true"
-									>
-										<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-											<path d="M5 12h14" strokeLinecap="round" />
-											<path d="m12 5 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
-										</svg>
-									</span>
-								</button>
-							);
-						})}
-					</div>
 				</div>
 
 				<div ref={panelsRef} className="relative min-h-[400px]">
@@ -249,6 +204,55 @@ const ServicesTabs = () => {
 									<div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-cyan/10 to-brand-lime/0" />
 								</div>
 							</article>
+						);
+					})}
+				</div>
+
+				<div
+					role="tablist"
+					aria-label="Codario Labs services"
+					aria-orientation="horizontal"
+					className="flex flex-wrap gap-4 lg:col-span-2"
+				>
+					{tabs.map((tab, index) => {
+						const selected = tab.id === activeId;
+						return (
+							<button
+								key={tab.id}
+								type="button"
+								role="tab"
+								id={`${tab.id}-tab`}
+								aria-selected={selected}
+								aria-controls={`${tab.id}-panel`}
+								onClick={() => handleTabClick(tab.id)}
+								onKeyDown={(event) => handleKeyDown(event, index)}
+								ref={(node) => {
+									if (node) {
+										buttonsRef.current[tab.id] = node;
+									}
+								}}
+								className={`flex w-full items-center justify-between rounded-3xl border px-5 py-4 text-left transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 sm:flex-1 sm:min-w-[240px] sm:w-auto ${
+									selected
+										? 'border-brand-dark bg-white text-brand-dark shadow-lg shadow-brand-dark/10'
+										: 'border-transparent bg-white/50 text-brand-dark/60 hover:text-brand-dark'
+								}`}
+							>
+								<div>
+									<p className="font-heading text-lg font-semibold">{tab.label}</p>
+									<p className="text-xs uppercase tracking-[0.3em] text-brand-dark/50">{tab.tagline}</p>
+								</div>
+								<span
+									className={`inline-flex h-10 w-10 items-center justify-center rounded-full transition ${
+										selected ? 'bg-brand-dark text-white' : 'bg-brand-dark/8 text-brand-dark/50'
+									}`}
+									aria-hidden="true"
+								>
+									<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+										<path d="M5 12h14" strokeLinecap="round" />
+										<path d="m12 5 7 7-7 7" strokeLinecap="round" strokeLinejoin="round" />
+									</svg>
+								</span>
+							</button>
 						);
 					})}
 				</div>

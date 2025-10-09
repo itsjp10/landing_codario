@@ -1,0 +1,91 @@
+		let particles = [];
+		let clusters = [];
+
+		const resize = () => {
+			const rect = canvas.getBoundingClientRect();
+			width = rect.width;
+			height = rect.height;
+			canvas.width = rect.width * dpr;
+			canvas.height = rect.height * dpr;
+			ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			initialise();
+		};
+
+		const computeParticleCount = () => {
+			if (pointCount) return pointCount;
+			const area = width * height;
+			return clamp(Math.round((area / 11000) * density), 160, 420);
+		};
+
+		const computeClusterCount = () => {
+			if (clustersProp) return clustersProp;
+			return clamp(Math.round(computeParticleCount() / 90), 4, 7);
+		};
+
+		const initialise = () => {
+			const totalParticles = computeParticleCount();
+			const clusterCount = computeClusterCount();
+			const now = performance.now();
+
+			const clusterSizes = new Array(clusterCount).fill(Math.floor(totalParticles / clusterCount));
+			for (let i = 0; i < totalParticles % clusterCount; i += 1) {
+				clusterSizes[i] += 1;
+			}
+
+			clusters = new Array(clusterCount).fill(null).map((_, index) => ({
+				id: index,
+				centerX: width * (0.15 + Math.random() * 0.7),
+				centerY: height * (0.2 + Math.random() * 0.6),
+				size: Math.min(width, height) * (0.18 + Math.random() * 0.14),
+				particleIndices: [],
+				shapeIndex: Math.floor(Math.random() * shapePool.length),
+				nextShapeIndex: null,
+				driftAngle: Math.random() * Math.PI * 2,
+				driftSpeed: driftSpeed * (0.6 + Math.random() * 0.8),
+				interval: baseIntervalMs + (Math.random() * desyncMs * 2 - desyncMs),
+				nextMorph: now + (Math.random() * baseIntervalMs) / 2,
+			}));
+
+	particles = [];
+			clusters.forEach((cluster, clusterIndex) => {
+				const count = clusterSizes[clusterIndex];
+				for (let i = 0; i < count; i += 1) {
+					const angle = Math.random() * Math.PI * 2;
+					const radius = Math.random() * (cluster.size * 0.4);
+					particles.push({
+						cluster: clusterIndex,
+						x: cluster.centerX + Math.cos(angle) * radius,
+						y: cluster.centerY + Math.sin(angle) * radius,
+						vx: (-0.5 + Math.random()) * 0.2,
+						vy: (-0.5 + Math.random()) * 0.2,
+						radius: 1.1 + Math.random() * 1.9,
+						startX: 0,
+						startY: 0,
+						targetX: null,
+						targetY: null,
+						morphStart: now,
+						morphDuration: 1200 + Math.random() * 400,
+						offset: Math.random() * Math.PI * 2,
+					});
+					cluster.particleIndices.push(particles.length - 1);
+				}
+			});
+
+			if (!reducedMotion) {
+				clusters.forEach((cluster) => {
+					assignClusterShape(cluster, performance.now(), true);
+				});
+			}
+		};
+
+		const assignClusterShape = (cluster, now, initial = false) => {
+			let shapeIndex = cluster.shapeIndex;
+			if (!initial) {
+				let nextIndex = Math.floor(Math.random() * shapePool.length);
+				if (shapePool.length > 1) {
+					while (nextIndex === shapeIndex) {
+						nextIndex = Math.floor(Math.random() * shapePool.length);
+					}
+				}
+				shapeIndex = nextIndex;
+			}
