@@ -1,28 +1,35 @@
 ---
 import '../styles/globals.css';
+import HeadSEO from '../components/HeadSEO.astro';
+import type { BreadcrumbItem, SEOProps } from '../utils/seo';
 
-interface Props {
-	title?: string;
-	description?: string;
-	ogImage?: string;
-	pageType?: string;
+interface Props extends SEOProps {
 	bodyClass?: string;
 	lang?: string;
+	breadcrumbs?: BreadcrumbItem[];
 }
 
 const {
-	title = 'Codario Labs — Web that launches and scales',
+	title,
 	description,
-	ogImage,
-	pageType = 'website',
+	image,
+	url,
+	noindex,
+	breadcrumbs,
+	type,
 	bodyClass = '',
 	lang = 'en',
 } = Astro.props as Props;
 
-const canonical =
-	Astro.site && Astro.url
-		? new URL(Astro.url.pathname, Astro.site).toString()
-		: Astro.url?.href ?? '';
+const seoProps = {
+	title,
+	description,
+	image,
+	url,
+	noindex,
+	breadcrumbs,
+	type,
+};
 ---
 
 <!DOCTYPE html>
@@ -30,22 +37,6 @@ const canonical =
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>{title}</title>
-		{description && <meta name="description" content={description} />}
-		<meta name="theme-color" content="#0A2540" />
-		<meta property="og:title" content={title} />
-		{description && <meta property="og:description" content={description} />}
-		<meta property="og:type" content={pageType} />
-		{canonical && <meta property="og:url" content={canonical} />}
-		<meta property="og:site_name" content="Codario Labs" />
-		{ogImage && <meta property="og:image" content={ogImage} />}
-		{ogImage && <meta property="og:image:alt" content="Codario Labs branding preview" />}
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={title} />
-		{description && <meta name="twitter:description" content={description} />}
-		{ogImage && <meta name="twitter:image" content={ogImage} />}
-		{canonical && <link rel="canonical" href={canonical} />}
-		<link rel="icon" type="image/svg+xml" href="/assets/logo-codario.svg" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link
@@ -65,6 +56,9 @@ const canonical =
 				href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap"
 			/>
 		</noscript>
+		<link rel="icon" type="image/svg+xml" href="/assets/logo-codario.svg" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<HeadSEO {...seoProps} />
 		<slot name="head" />
 	</head>
 	<body

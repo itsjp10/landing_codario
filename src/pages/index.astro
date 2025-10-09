@@ -17,12 +17,16 @@ import ContactForm from '../components/ContactForm.astro';
 const title = 'Codario Labs — Web that launches and scales';
 const description =
 	'Modern web development for startups and small businesses: landing pages, web apps, and growth retainers.';
-const ogImage = '/assets/og-placeholder.jpg';
 ---
 
-<BaseLayout title={title} description={description} ogImage={ogImage}>
+<BaseLayout
+	title={title}
+	description={description}
+	image="/assets/og.png"
+	breadcrumbs={[{ name: 'Home', url: '/' }]}
+>
 	<Header />
-	<main id="main-content" class="flex flex-col gap-0">
+	<main id="main-content" class="flex flex-col gap-0 bg-white">
 		<Hero />
 		<LogosMarquee />
 		<Features />

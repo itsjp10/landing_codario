@@ -1,0 +1,66 @@
+---
+import {
+	DEFAULT_DESCRIPTION,
+	DEFAULT_IMAGE,
+	DEFAULT_TITLE,
+	SITE_NAME,
+	THEME_COLOR,
+	absoluteUrl,
+	buildBreadcrumbSchema,
+	type BreadcrumbItem,
+	type SEOProps,
+	organizationSchema,
+	websiteSchema,
+} from '../utils/seo';
+
+interface Props extends SEOProps {
+	breadcrumbs?: BreadcrumbItem[];
+}
+
+const {
+	title = DEFAULT_TITLE,
+	description = DEFAULT_DESCRIPTION,
+	image = DEFAULT_IMAGE,
+	url,
+	noindex = false,
+	breadcrumbs = [],
+	type = 'website',
+} = Astro.props as Props;
+
+const canonical = absoluteUrl(url ?? Astro.url?.pathname ?? '/');
+const ogImage = absoluteUrl(image);
+const pageUrl = canonical;
+
+const breadcrumbsSchema = buildBreadcrumbSchema(breadcrumbs);
+const schemas = [organizationSchema, websiteSchema, breadcrumbsSchema].filter(
+	(schema): schema is Record<string, unknown> => Boolean(schema),
+);
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<meta name="theme-color" content={THEME_COLOR} />
+<meta name="robots" content={noindex ? 'noindex, nofollow' : 'index, follow'} />
+<link rel="canonical" href={canonical} />
+
+<meta property="og:type" content={type} />
+<meta property="og:locale" content="en_US" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={pageUrl} />
+<meta property="og:site_name" content={SITE_NAME} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="Codario Labs preview image" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{schemas.map((schema) => (
+	<script type="application/ld+json" is:inline>
+		{JSON.stringify(schema)}
+	</script>
+))}

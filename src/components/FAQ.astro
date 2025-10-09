@@ -3,7 +3,7 @@ const faqs = [
 	{
 		question: 'How fast can we launch a new landing page?',
 		answer:
-			'Most landing pages ship in 10–14 days. We start with a positioning workshop, then move into wireframes, design, development, analytics setup, and QA before going live.',
+			'Most landing pages ship in 10-14 days. We start with a positioning workshop, then move into wireframes, design, development, analytics setup, and QA before going live.',
 	},
 	{
 		question: 'Do you work with in-house teams or agencies?',
@@ -28,7 +28,7 @@ const faqs = [
 	{
 		question: 'What if we only need engineering or design?',
 		answer:
-			'We offer focused engagements—design-only, front-end implementation, CMS migrations, and more. Tell us what you need and we’ll scope the right team.',
+			'We offer focused engagements—design-only, front-end implementation, CMS migrations, and more. Tell us what you need and we will scope the right team.',
 	},
 	{
 		question: 'Do you handle analytics and instrumentation?',
@@ -38,7 +38,7 @@ const faqs = [
 	{
 		question: 'How do communications run during an engagement?',
 		answer:
-			'You’ll have a dedicated Slack channel, weekly standups, async status updates, and shared docs with timelines, deliverables, and decisions.',
+			'You will have a dedicated Slack channel, weekly standups, async status updates, and shared docs with timelines, deliverables, and decisions.',
 	},
 	{
 		question: 'What happens post-launch?',
@@ -48,16 +48,31 @@ const faqs = [
 	{
 		question: 'Can you integrate with our existing systems?',
 		answer:
-			'Yes. CRM, payment gateways, marketing automation, internal APIs—we scope integrations up front and ensure they’re production-ready before launch.',
+			'Yes. CRM, payment gateways, marketing automation, internal APIs—we scope integrations up front and ensure they are production-ready before launch.',
 	},
 ];
+
+const faqSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: faqs.map((faq) => ({
+		'@type': 'Question',
+		name: faq.question,
+		acceptedAnswer: {
+			'@type': 'Answer',
+			text: faq.answer,
+		},
+	})),
+};
 ---
 
 <section class="bg-white py-24" id="faq">
 	<div class="container max-w-4xl">
 		<div class="text-center">
 			<p class="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">FAQ</p>
-			<h2 class="mt-4 text-3xl font-semibold text-brand-dark sm:text-4xl">Answers to common questions about partnering with Codario Labs.</h2>
+			<h2 class="mt-4 text-3xl font-semibold text-brand-dark sm:text-4xl">
+				Answers to common questions about partnering with Codario Labs.
+			</h2>
 			<p class="mt-4 text-sm text-brand-dark/70">
 				Need more details? Reach out via the contact form and we’ll share playbooks, case studies, and timelines suited to your roadmap.
 			</p>
@@ -96,6 +111,8 @@ const faqs = [
 		</div>
 	</div>
 </section>
+
+<script type="application/ld+json" is:inline>{JSON.stringify(faqSchema)}</script>
 
 <script type="module" is:inline>
 	document.addEventListener('astro:page-load', () => {

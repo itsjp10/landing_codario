@@ -1,0 +1,18 @@
+{
+  "name": "Codario Labs",
+  "short_name": "Codario",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0A2540",
+  "theme_color": "#0A2540",
+  "description": "Codario Labs builds modern web experiences for startups and small businesses.",
+  "icons": [
+    {
+      "src": "/assets/logo-codario.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

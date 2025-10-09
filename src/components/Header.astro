@@ -17,19 +17,21 @@ const { active = '' } = Astro.props as Props;
 <header class="site-header" data-header data-open="false" data-scrolled="false">
 	<div class="container flex items-center justify-between gap-4 py-4">
 		<a
-			class="group flex items-center gap-3 text-brand-dark transition-transform duration-200 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+			class="group flex items-center gap-1 text-brand-dark transition-transform duration-200 ease-out hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan focus-visible:ring-offset-2 focus-visible:ring-offset-white"
 			href="#top"
 		>
 			<img
-				src="/assets/logo-codario.svg"
+				src="/assets/logo-codario.png"
 				alt="Codario Labs logo"
-				width="40"
-				height="40"
-				class="h-10 w-10"
+				class="h-10 w-10 scale-[2.5]" 
 				loading="lazy"
 				decoding="async"
 			/>
-			<span class="font-heading text-lg font-semibold tracking-tight">Codario Labs</span>
+			<span class="logo-wordmark" aria-hidden="true">
+				<span class="logo-wordmark__primary">Codario</span>
+				<span class="logo-wordmark__secondary">Labs</span>
+			</span>
+			<span class="sr-only">Codario Labs</span>
 		</a>
 		<nav class="hidden items-center gap-10 lg:flex" aria-label="Primary navigation">
 			{navLinks.map(({ id, label, href }) => (
@@ -185,9 +187,36 @@ const { active = '' } = Astro.props as Props;
 		opacity: 0;
 	}
 
-	.site-header[data-open='true'] .hamburger span:nth-child(3) {
-		transform: translateY(-7px) rotate(-45deg);
-	}
+.site-header[data-open='true'] .hamburger span:nth-child(3) {
+	transform: translateY(-7px) rotate(-45deg);
+}
+
+.logo-wordmark {
+	display: flex;
+	flex-direction: column;
+	line-height: 0.9;
+	letter-spacing: -0.01em;
+}
+
+.logo-wordmark__primary {
+	font-family: var(--font-display, 'Poppins', system-ui, -apple-system, sans-serif);
+	font-weight: 700;
+	font-size: 1.125rem;
+	background: linear-gradient(90deg, #3BAFDA 0%, #0A2540 100%);
+	background-clip: text;
+	-webkit-background-clip: text;
+	color: transparent;
+	-webkit-text-fill-color: transparent;
+}
+
+.logo-wordmark__secondary {
+	font-family: var(--font-display, 'Poppins', system-ui, -apple-system, sans-serif);
+	font-weight: 600;
+	font-size: 0.85rem;
+	color: #3BAFDA;
+	margin-top: 0.2rem;
+
+}
 
 	@media (min-width: 1024px) {
 		.mobile-menu {
