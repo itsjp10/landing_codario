@@ -101,11 +101,6 @@ const ParticlesBG = ({ density = defaultConfig.density, color = defaultConfig.co
 		const drawParticles = () => {
 			if (!width || !height) return;
 			ctx.clearRect(0, 0, width, height);
-			const gradient = ctx.createRadialGradient(width * 0.7, height * 0.3, 0, width * 0.5, height * 0.5, width);
-			gradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.18)`);
-			gradient.addColorStop(1, 'rgba(10, 37, 64, 0)');
-			ctx.fillStyle = gradient;
-			ctx.fillRect(0, 0, width, height);
 
 			for (let i = 0; i < particles.length; i += 1) {
 				const particle = particles[i];

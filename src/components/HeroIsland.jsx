@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import ParticlesBG from './ParticlesBG.jsx';
 
 let pluginsRegistered = false;
 
@@ -129,7 +128,10 @@ const HeroIsland = () => {
 					data-hero-stagger
 					className="mt-6 max-w-3xl font-heading text-4xl font-semibold leading-tight text-brand-dark sm:text-5xl lg:text-6xl"
 				>
-					Build web experiences that launch and scale.
+					<span className="relative inline-block">
+						<span className="absolute inset-[-25%] -z-10 rounded-[2.5rem] bg-[radial-gradient(circle_at_center,_rgba(59,175,218,0.18)_0%,_rgba(155,229,100,0.08)_45%,_rgba(10,37,64,0)_90%)] blur-2xl"></span>
+						<span className="relative">Build web experiences that launch and scale.</span>
+					</span>
 				</h1>
 				<p data-hero-stagger className="mt-6 max-w-2xl text-lg text-brand-dark/75 sm:text-xl">
 					Codario Labs crafts modern web apps, management systems, and high-impact landing pages for startups and
@@ -200,21 +202,19 @@ const HeroIsland = () => {
 				</div>
 			</div>
 
-			<ParticlesBG density={1.2} className="absolute -inset-x-16 -top-28 h-[140%] w-[130%]" />
-
 			<div
 				ref={(node) => {
 					blobRefs.current[0] = node;
 				}}
 				aria-hidden="true"
-				className="pointer-events-none absolute -left-24 -top-28 h-[540px] w-[540px] rounded-full bg-brand-cyan/25 blur-3xl mix-blend-screen"
+				className="pointer-events-none absolute -z-10 -left-24 -top-28 h-[540px] w-[540px] rounded-full bg-brand-cyan/25 blur-3xl mix-blend-screen"
 			/>
 			<div
 				ref={(node) => {
 					blobRefs.current[1] = node;
 				}}
 				aria-hidden="true"
-				className="pointer-events-none absolute -right-20 bottom-[-240px] h-[520px] w-[520px] rounded-full bg-brand-lime/18 blur-3xl mix-blend-screen"
+				className="pointer-events-none absolute -z-10 -right-20 bottom-[-240px] h-[520px] w-[520px] rounded-full bg-brand-lime/18 blur-3xl mix-blend-screen"
 			/>
 		</div>
 	);

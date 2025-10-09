@@ -1,8 +1,10 @@
 ---
 import HeroIsland from './HeroIsland.jsx';
+import ParticlesBG from './ParticlesBG.jsx';
 ---
 
 <section class="relative flex min-h-screen items-center overflow-hidden bg-white py-28 sm:py-32 lg:py-40">
+	<ParticlesBG client:load/>
 	<HeroIsland client:load />
 	<div aria-hidden="true" class="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-white"></div>
 </section>
