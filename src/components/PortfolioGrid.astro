@@ -1,97 +1,103 @@
 ---
 import { Image } from 'astro:assets';
-import mock1 from '../assets/mock1.jpg';
-import mock2 from '../assets/mock2.jpg';
-import mock3 from '../assets/mock3.jpg';
-import mock4 from '../assets/mock4.jpg';
-import mock5 from '../assets/mock5.jpg';
+import work1 from '../assets/work1.jpg';
+import work2 from '../assets/work2.jpg';
+import work3 from '../assets/work3.jpg';
+import work4 from '../assets/work4.jpg';
+import work5 from '../assets/work5.jpg';
 import mock6 from '../assets/mock6.jpg';
 
 const projects = [
-	{
-		title: 'OrbitOps Launch',
-		industry: 'SaaS · Operations',
-		kpi: '↑ 42% conversion in 30 days',
-		description:
-			'OrbitOps needed a high-converting product launch that connected operations teams to their automation platform. We rebuilt the narrative, simplified the onboarding flow, and shipped in 12 days.',
-		image: mock1,
-		href: '#',
-		modal: {
-			overview:
-				'We designed a modular hero system, integrated product video inlined above the fold, and connected sign-ups to the CRM. Split testing generated a 42% conversion lift against the legacy page.',
-			highlights: ['Ship time: 12 days', 'Tooling: Astro, Vercel, HubSpot', 'Assets: Landing, email flow, analytics dashboards'],
-		},
-	},
-	{
-		title: 'Northwind CRM',
-		industry: 'B2B Services',
-		kpi: '↓ 28% bounce rate',
-		description:
-			'A lead-generation experience that feeds multiple industries while preserving clarity. We created industry-specific sections and a pricing calculator tied to analytics.',
-		image: mock2,
-		href: '#',
-		modal: {
-			overview:
-				'Micro-interactions on pricing toggles and reorganized flows deliver clarity to prospects. Integrations push qualified leads to Salesforce with contextual data.',
-			highlights: ['Ship time: 3 weeks', 'Tooling: Astro, Alpine.js, Salesforce', 'Deliverables: Landing, calculator widget'],
-		},
-	},
-	{
-		title: 'Brightside Portal',
-		industry: 'Healthcare',
-		kpi: '↑ 31% engagement',
-		description:
-			'A patient portal redesign with a focus on accessibility and mobile usage. We delivered a responsive dashboard, scheduling flows, and educational content library.',
-		image: mock3,
-		href: '#',
-		modal: {
-			overview:
-				'We embedded WCAG AA standards, added video explainers, and improved dashboards for provider messaging. Engagement increased as patients completed onboarding steps.',
-			highlights: ['Ship time: 6 weeks', 'Tooling: React, Astro Islands, Supabase', 'Deliverables: Portal UI, content management'],
-		},
-	},
-	{
-		title: 'AtlasPay Console',
-		industry: 'Fintech',
-		kpi: '↑ 19% ARPU',
-		description:
-			'Codario Labs unified AtlasPay’s console with new billing insights, churn alerts, and integration guides. We also automated release notes and tooltips.',
-		image: mock4,
-		href: '#',
-		modal: {
-			overview:
-				'The console ships with live usage metrics, custom onboarding checklists, and triggered tooltips. GSAP-powered transitions improve orientation without sacrificing performance.',
-			highlights: ['Ship time: 7 weeks', 'Tooling: Astro, React, Node APIs', 'Deliverables: Console UI, docs, automation'],
-		},
-	},
-	{
-		title: 'Launchpad DAO',
-		industry: 'Web3',
-		kpi: '↑ 55% signup conversion',
-		description:
-			'A marketing site and investor hub that simplifies Launchpad DAO’s token mechanics. We translated complex messaging into clear value props, product visuals, and CTAs.',
-		image: mock5,
-		href: '#',
-		modal: {
-			overview:
-				'The hub integrates community stats, product roadmap, and investor FAQs. A localized content system ensures compliance messaging across regions.',
-			highlights: ['Ship time: 15 days', 'Tooling: Astro, Contentful', 'Deliverables: Marketing site, investor hub, analytics'],
-		},
-	},
-	{
-		title: 'Nova Support Hub',
-		industry: 'Customer Success',
-		kpi: '↓ 34% resolution time',
-		description:
-			'We crafted a support knowledge base with AI search, templated macros, and analytics dashboards. Teams now ship new content in minutes.',
-		image: mock6,
-		href: '#',
-		modal: {
-			overview:
-				'Automated workflows notify teams of content gaps. We built analytics dashboards that highlight ticket deflection and satisfaction trends.',
-			highlights: ['Ship time: 4 weeks', 'Tooling: Astro, React, Airtable', 'Deliverables: Knowledge base, analytics, scripts'],
-		},
-	},
+  {
+    title: 'Formats · Vive Río',
+    industry: 'Construction · Ops',
+    kpi: '↑ Faster approvals, paperless flow',
+    description:
+      'Full-stack web app to create, sign, and share worksite forms digitally with technical supervision and contractor validation.',
+    image: work1,
+    href: '#',
+    modal: {
+      overview:
+        'Digitized the form lifecycle end-to-end: creation, role-based signatures, and PDF exports ready for archiving. Reduced manual handling and sped up approvals.',
+      highlights: [
+        'Ship time: ~6–8 weeks',
+        'Tooling: Next.js, WebSockets, Puppeteer, Railway',
+        'Deliverables: Form builder, e-sign, PDF pipeline, admin',
+      ],
+    },	
+  },
+  {
+    title: 'Audio → Text Transcription',
+    industry: 'SaaS · Media',
+    kpi: '↑ Scalable async processing',
+    description:
+      'Platform that converts audio files into text transcripts with export options for PDF/TXT and real-time status updates.',
+    image: work2,
+    href: '#',
+    modal: {
+      overview:
+        'Implemented async queues and webhook updates to handle large uploads reliably. Clear progress states and clean exports.',
+      highlights: [
+        'Ship time: ~3–4 weeks',
+        'Tooling: Next.js, React, AssemblyAI API, Git/GitHub',
+        'Deliverables: Upload UI, job tracker, exporters',
+      ],
+    },
+  },
+  {
+    title: 'Eyeland · Azure Deployment',
+    industry: 'Cloud · DevOps',
+    kpi: '↑ Production-grade reliability',
+    description:
+      'Backend & database deployment on Azure with secure configuration, performance checks, and mobile app data flows.',
+    image: work3, // '../assets/eyeland.jpg'
+    href: '#',
+    modal: {
+      overview:
+        'Set up App Service/Static Web Apps, environment variables, and versioned releases. Verified API, auth, and mobile data paths; produced deployment docs.',
+      highlights: [
+        'Timeline: Jan–Jun',
+        'Tooling: Azure App Service, Azure SQL, Node.js, JWT',
+        'Deliverables: Cloud setup, CI/CD, docs & handoff',
+      ],
+    },
+  },
+  {
+    title: 'Appointment Scheduler',
+    industry: 'EdTech',
+    kpi: '↓ Manual coordination time',
+    description:
+      'Scheduling app for professors in English courses with responsive UI and secure CRUD flows.',
+    image: work4,
+    href: '#',
+    modal: {
+      overview:
+        'Simplified appointment booking and notifications; reduced back-and-forth and centralized availability.',
+      highlights: [
+        'Ship time: ~3 weeks',
+        'Tooling: Next.js, Node.js, PostgreSQL',
+        'Deliverables: Booking UI, admin, email notices',
+      ],
+    },
+  },
+  {
+    title: 'Way2Go · Delivery',
+    industry: 'Logistics · Mobile',
+    kpi: '↑ Rapid prototype',
+    description:
+      'Prototype for a delivery app using low-code + Firebase to validate flows quickly.',
+    image: work5,
+    href: '#',
+    modal: {
+      overview:
+        'Built MVP flows for auth, orders, and tracking to test assumptions before a full custom build.',
+      highlights: [
+        'Timeline: ~4 months (team)',
+        'Tooling: FlutterFlow, Firebase',
+        'Deliverables: MVP mobile flows, auth, data',
+      ],
+    },
+  },
 ];
 ---
 
@@ -133,20 +139,6 @@ const projects = [
 								<p class="text-sm leading-relaxed text-brand-dark/70">{project.description}</p>
 							</div>
 							<div class="mt-auto flex items-center justify-between text-sm font-semibold text-brand-dark/70">
-								<button
-									class="inline-flex items-center gap-2 rounded-full border border-brand-dark/10 px-4 py-2 transition hover:border-brand-dark hover:bg-brand-dark hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40"
-									data-modal-open={modalId}
-									type="button"
-								>
-									View case study
-									<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-										<path d="M5 12h14" stroke-linecap="round" />
-										<path d="m12 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
-									</svg>
-								</button>
-								<a class="text-brand-cyan hover:text-brand-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-cyan/40" href={project.href}>
-									Live demo
-								</a>
 							</div>
 						</div>
 						<dialog
@@ -174,7 +166,7 @@ const projects = [
 									<p class="text-sm leading-relaxed text-brand-dark/70">{project.modal.overview}</p>
 									<ul class="grid gap-3 text-sm text-brand-dark/80 md:grid-cols-2">
 										{project.modal.highlights.map((item) => (
-											<li class="rounded-2xl bg-brand-gray/80 px-4 py-3" key={item}>
+											<li class="rounded-2xl bg-brand-gray/80 px-4 py-3">
 												{item}
 											</li>
 										))}
