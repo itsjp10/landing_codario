@@ -71,6 +71,7 @@ export default {
             transform: 'translateY(-2px)',
             boxShadow: '0 18px 38px rgba(10, 37, 64, 0.22)',
             backgroundColor: theme('colors.brand.cyan'),
+            color: theme('colors.brand.dark'),
           },
           '&:focus-visible': {
             outline: '2px solid transparent',
@@ -80,19 +81,20 @@ export default {
         },
         '.btn-secondary': {
           ...baseButton,
-          backgroundColor: theme('colors.brand.cyan'),
+          backgroundColor: '#E6F4FB',
           color: theme('colors.brand.dark'),
           borderWidth: '1px',
           borderColor: theme('colors.brand.cyan'),
           '&:hover, &:focus-visible': {
             transform: 'translateY(-2px)',
-            backgroundColor: theme('colors.brand.lime'),
-            borderColor: theme('colors.brand.lime'),
+            backgroundColor: theme('colors.brand.cyan'),
+            borderColor: theme('colors.brand.cyan'),
+            color: theme('colors.white'),
           },
           '&:focus-visible': {
             outline: '2px solid transparent',
             outlineOffset: '2px',
-            boxShadow: `0 0 0 3px rgba(155, 229, 100, 0.45)`,
+            boxShadow: `0 0 0 3px rgba(38, 164, 217, 0.45)`,
           },
         },
         '.btn-ghost': {

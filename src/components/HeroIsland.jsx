@@ -140,7 +140,7 @@ const HeroIsland = () => {
 				<div data-hero-cta className="mt-10 flex flex-col gap-4 sm:flex-row">
 					<a
 						data-hero-btn
-						className="btn-primary inline-flex items-center gap-2 bg-brand-dark text-white hover:bg-brand-cyan focus-visible:bg-brand-cyan"
+						className="btn-primary inline-flex items-center gap-2 bg-brand-dark text-white hover:bg-brand-cyan hover:text-brand-dark focus-visible:bg-brand-cyan focus-visible:text-brand-dark"
 						href="#contact"
 						aria-label="Get a free audit with Codario Labs"
 					>
