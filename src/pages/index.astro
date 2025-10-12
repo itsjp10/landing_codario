@@ -1,34 +1,70 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import Hero from '../components/Hero.astro';
-import LogosMarquee from '../components/LogosMarquee.astro';
-import Features from '../components/Features.astro';
-import ServicesTabs from '../components/ServicesTabs.jsx';
-import PortfolioGrid from '../components/PortfolioGrid.astro';
-import ProcessTimeline from '../components/ProcessTimeline.jsx';
-import TestimonialsSlider from '../components/TestimonialsSlider.jsx';
-import Pricing from '../components/Pricing.astro';
-import FAQ from '../components/FAQ.astro';
-import CTA from '../components/CTA.astro';
-import ContactForm from '../components/ContactForm.astro';
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Hero from "../components/Hero.astro";
+import ClientsToolsMarquee from "../components/ClientsToolsMarquee.astro";
+import Features from "../components/Features.astro";
+import ServicesTabs from "../components/ServicesTabs.jsx";
+import PortfolioGrid from "../components/PortfolioGrid.astro";
+import ProcessTimeline from "../components/ProcessTimeline.jsx";
+import TestimonialsSlider from "../components/TestimonialsSlider.jsx";
+import Pricing from "../components/Pricing.astro";
+import FAQ from "../components/FAQ.astro";
+import CTA from "../components/CTA.astro";
+import ContactForm from "../components/ContactForm.astro";
 
-const title = 'Codario Labs — Web that launches and scales';
+const tools = [
+{ src: "/src/assets/tools/figma.svg", alt: "Figma" },
+{ src: "/src/assets/tools/github.svg", alt: "GitHub" },
+{ src: "/src/assets/tools/netlify.svg", alt: "Netlify" },
+{ src: "/src/assets/tools/vercel.svg", alt: "Vercel" },
+{ src: "/src/assets/tools/shopify.svg", alt: "Shopify" },
+{ src: "/src/assets/tools/stripe.svg", alt: "Stripe" },
+{ src: "/src/assets/tools/postgresql.svg", alt: "PostgreSQL" },
+{ src: "/src/assets/tools/mongodb.svg", alt: "MongoDB" },
+{ src: "/src/assets/tools/docker.svg", alt: "Docker" },
+{ src: "/src/assets/tools/nextjs.svg", alt: "Next.js" },
+{ src: "/src/assets/tools/supabase.png", alt: "Supabase" },
+{ src: "/src/assets/tools/react.svg", alt: "React" },
+{ src: "/src/assets/tools/angular.svg", alt: "Angular" },
+{ src: "/src/assets/tools/nodejs.svg", alt: "Node.js" },
+];
+
+
+const clients = [{ src: "/src/assets/clients/uninorte.png", alt: "Uninorte" },
+	{ src: "/src/assets/clients/ydn.png", alt: "YDN" },
+	{ src: "/src/assets/clients/aia.png", alt: "aia" },
+	{ src: "/src/assets/clients/viverio.png", alt: "Vive rio" }
+];
+
+
+const title = "Codario Labs — Web that launches and scales";
 const description =
-	'Modern web development for startups and small businesses: landing pages, web apps, and growth retainers.';
+	"Modern web development for startups and small businesses: landing pages, web apps, and growth retainers.";
 ---
 
 <BaseLayout
 	title={title}
 	description={description}
 	image="/assets/og.png"
-	breadcrumbs={[{ name: 'Home', url: '/' }]}
+	breadcrumbs={[{ name: "Home", url: "/" }]}
 >
 	<Header />
 	<main id="main-content" class="flex flex-col gap-0 bg-white">
 		<Hero />
-		<LogosMarquee />
+		<ClientsToolsMarquee
+			row1={clients}
+			row2={tools}
+			heading="Clients & Tools we collaborate with"
+			subheading="Logos shown for identification; trademarks belong to their owners."
+			row1Label="Clients"
+			row1Caption="A few teams we’ve partnered with."
+			row2Label="Tools"
+			row2Caption="Our core stack for building, shipping, and scaling."
+			grayscale={true}
+			speedMs={50000}
+		/>
 		<Features />
 		<ServicesTabs client:load />
 		<PortfolioGrid />
