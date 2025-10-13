@@ -2,80 +2,95 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const defaultItems = [
 	{
-		name: 'Maya Chen',
-		role: 'COO',
-		company: 'OrbitOps',
-		quote:
-			'Codario Labs rebuilt our marketing stack in five weeks. Pipeline lifted 38% and our ops team finally has a system they trust.',
-	},
-	{
-		name: 'Devin Hart',
-		role: 'Head of Product',
-		company: 'AtlasPay',
-		quote:
-			'The squad felt like an extension of our own—design, engineering, and analytics running in sync. Every sprint shipped real value.',
-	},
-	{
-		name: 'Sara Koenig',
-		role: 'Growth Lead',
-		company: 'Launchpad DAO',
-		quote:
-			'Messaging, UX, implementation—Codario handled it all. Our investor funnel now performs 2.1x better and the playbooks they left behind are stellar.',
-	},
-	{
-		name: 'Jonas Patel',
+		name: 'Ava Smith',
 		role: 'Founder',
-		company: 'Nova CRM',
-		quote:
-			'They delivered a dashboard our customers rave about. Everything is instrumented, accessible, and ready for the next stage of growth.',
+		company: 'Seedly',
+		quote: 'They shipped in days, not months. Clean, scalable, and on brand.',
 	},
 	{
-		name: 'Amelia Wright',
-		role: 'VP Marketing',
-		company: 'Brightside Health',
-		quote:
-			'From discovery to launch we always knew what was shipping. The new portal onboarded 64% more users in the first month.',
+		name: 'Liam Jones',
+		role: 'COO',
+		company: 'MarketOne',
+		quote: 'Our conversion lifted 32%. Clear communication and fast delivery.',
+	},
+	{
+		name: 'Noah Lee',
+		role: 'CTO',
+		company: 'Nimbus',
+		quote: 'Reliable, thoughtful engineering and solid code quality.',
+	},
+	{
+		name: 'Emma Davis',
+		role: 'PM',
+		company: 'Flowbit',
+		quote: 'Smooth process, from scope to launch. Great collaboration.',
+	},
+	{
+		name: 'Olivia Chen',
+		role: 'CEO',
+		company: 'BrightCart',
+		quote: 'The best dev partner we\u2019ve worked with\u2014period.',
 	},
 ];
 
 const SWIPE_THRESHOLD = 48;
 
-const TestimonialsSlider = ({
-	items = defaultItems,
-	ariaLabel = 'Testimonials',
-	autoPlayMs = 5000,
-}) => {
-	const baseItems = items.length ? items : defaultItems;
-	const length = baseItems.length;
-	const extendedItems = useMemo(() => [...baseItems, ...baseItems, ...baseItems], [baseItems]);
+const usePrefersReducedMotion = () => {
+	const [prefers, setPrefers] = useState(() => {
+		if (typeof window === 'undefined' || !('matchMedia' in window)) {
+			return false;
+		}
+		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+	});
+
+	useEffect(() => {
+		if (typeof window === 'undefined' || !('matchMedia' in window)) {
+			return undefined;
+		}
+		const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const handleChange = () => setPrefers(media.matches);
+		if (media.addEventListener) {
+			media.addEventListener('change', handleChange);
+		} else {
+			media.addListener(handleChange);
+		}
+		return () => {
+			if (media.removeEventListener) {
+				media.removeEventListener('change', handleChange);
+			} else {
+				media.removeListener(handleChange);
+			}
+		};
+	}, []);
+
+	return prefers;
+};
+
+const TestimonialsSlider = ({ items = defaultItems, ariaLabel = 'Testimonials', autoPlayMs = 5000 }) => {
+	const normalizedItems = items.length ? items : defaultItems;
+	const length = normalizedItems.length;
+	const extendedItems = useMemo(() => normalizedItems.concat(normalizedItems, normalizedItems), [normalizedItems]);
 	const midpoint = length;
 
 	const [activeIndex, setActiveIndex] = useState(midpoint);
 	const [translateX, setTranslateX] = useState(0);
+
+	const prefersReducedMotion = usePrefersReducedMotion();
 
 	const containerRef = useRef(null);
 	const trackRef = useRef(null);
 	const slideRefs = useRef([]);
 	const headingRefs = useRef([]);
 	const autoplayRef = useRef(null);
-	const pointerStartX = useRef(null);
-	const pointerActive = useRef(false);
+	const pointerStartXRef = useRef(null);
+	const pointerActiveRef = useRef(false);
 	const shouldFocusHeading = useRef(false);
-	const reducedMotionRef = useRef(false);
 
-	const logicalIndex = ((activeIndex - midpoint) % length + length) % length;
-
-	const isReducedMotion = useMemo(() => {
-		if (typeof window === 'undefined') return false;
-		return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-	}, []);
-
-	useEffect(() => {
-		reducedMotionRef.current = isReducedMotion;
-	}, [isReducedMotion]);
+	const logicalIndex = length ? ((activeIndex - midpoint) % length + length) % length : 0;
 
 	const maintainLoopBounds = useCallback(
 		(index) => {
+			if (length === 0) return 0;
 			if (index >= midpoint + length) {
 				return index - length;
 			}
@@ -89,36 +104,32 @@ const TestimonialsSlider = ({
 
 	const calculateTranslate = useCallback(() => {
 		const container = containerRef.current;
-		const track = trackRef.current;
 		const slide = slideRefs.current[activeIndex];
-		if (!container || !track || !slide) return;
+		if (!container || !slide) return;
 
-		const gap = parseFloat(getComputedStyle(track).gap || '0');
-		const slideWidth = slide.offsetWidth;
 		const containerWidth = container.offsetWidth;
 		const slideLeft = slide.offsetLeft;
-
+		const slideWidth = slide.offsetWidth;
 		const slideCenter = slideLeft + slideWidth / 2;
 		const targetOffset = slideCenter - containerWidth / 2;
 		setTranslateX(-targetOffset);
 	}, [activeIndex]);
 
 	useEffect(() => {
-		const handleResize = () => {
-			window.requestAnimationFrame(calculateTranslate);
-		};
-
+		const handleResize = () => window.requestAnimationFrame(calculateTranslate);
 		handleResize();
 
-		const observer = new ResizeObserver(handleResize);
-		if (containerRef.current) observer.observe(containerRef.current);
-		if (trackRef.current) observer.observe(trackRef.current);
+		let observer;
+		if (typeof ResizeObserver !== 'undefined') {
+			observer = new ResizeObserver(handleResize);
+			if (containerRef.current) observer.observe(containerRef.current);
+			if (trackRef.current) observer.observe(trackRef.current);
+		}
 
 		window.addEventListener('resize', handleResize);
-
 		return () => {
-			observer.disconnect();
 			window.removeEventListener('resize', handleResize);
+			if (observer) observer.disconnect();
 		};
 	}, [calculateTranslate]);
 
@@ -128,9 +139,9 @@ const TestimonialsSlider = ({
 
 	useEffect(() => {
 		if (shouldFocusHeading.current) {
-			const currentHeading = headingRefs.current[activeIndex];
-			if (currentHeading) {
-				currentHeading.focus({ preventScroll: true });
+			const target = headingRefs.current[activeIndex];
+			if (target) {
+				target.focus({ preventScroll: true });
 			}
 			shouldFocusHeading.current = false;
 		}
@@ -144,12 +155,12 @@ const TestimonialsSlider = ({
 	}, []);
 
 	const startAutoplay = useCallback(() => {
-		if (reducedMotionRef.current || autoPlayMs <= 0) return;
+		if (prefersReducedMotion || autoPlayMs <= 0 || length <= 1) return;
 		stopAutoplay();
 		autoplayRef.current = setInterval(() => {
 			setActiveIndex((prev) => maintainLoopBounds(prev + 1));
 		}, autoPlayMs);
-	}, [autoPlayMs, maintainLoopBounds, stopAutoplay]);
+	}, [autoPlayMs, length, maintainLoopBounds, prefersReducedMotion, stopAutoplay]);
 
 	useEffect(() => {
 		startAutoplay();
@@ -167,12 +178,20 @@ const TestimonialsSlider = ({
 		};
 	}, [startAutoplay, stopAutoplay]);
 
+	useEffect(() => {
+		if (prefersReducedMotion) {
+			stopAutoplay();
+		} else {
+			startAutoplay();
+		}
+	}, [prefersReducedMotion, startAutoplay, stopAutoplay]);
+
 	const goTo = useCallback(
 		(targetIndex, { focusHeading = false } = {}) => {
 			shouldFocusHeading.current = focusHeading;
 			setActiveIndex((prev) => {
-				const next = maintainLoopBounds(typeof targetIndex === 'function' ? targetIndex(prev) : targetIndex);
-				return next;
+				const next = typeof targetIndex === 'function' ? targetIndex(prev) : targetIndex;
+				return maintainLoopBounds(next);
 			});
 		},
 		[maintainLoopBounds],
@@ -203,24 +222,24 @@ const TestimonialsSlider = ({
 
 	const handlePointerDown = (event) => {
 		if (event.pointerType === 'mouse') return;
-		pointerStartX.current = event.clientX;
-		pointerActive.current = true;
+		pointerStartXRef.current = event.clientX;
+		pointerActiveRef.current = true;
 		stopAutoplay();
 		event.currentTarget.setPointerCapture?.(event.pointerId);
 	};
 
 	const handlePointerMove = (event) => {
-		if (!pointerActive.current || pointerStartX.current === null) return;
-		const delta = event.clientX - pointerStartX.current;
+		if (!pointerActiveRef.current || pointerStartXRef.current === null) return;
+		const delta = event.clientX - pointerStartXRef.current;
 		if (Math.abs(delta) >= SWIPE_THRESHOLD) {
 			goTo(delta < 0 ? activeIndex + 1 : activeIndex - 1);
-			pointerStartX.current = event.clientX;
+			pointerStartXRef.current = event.clientX;
 		}
 	};
 
 	const handlePointerUp = (event) => {
-		pointerActive.current = false;
-		pointerStartX.current = null;
+		pointerActiveRef.current = false;
+		pointerStartXRef.current = null;
 		event.currentTarget.releasePointerCapture?.(event.pointerId);
 		startAutoplay();
 	};
@@ -230,6 +249,21 @@ const TestimonialsSlider = ({
 		if (index === activeIndex - 1 || index === activeIndex + 1) return 'adjacent';
 		return 'inactive';
 	};
+
+	const trackClassName = useMemo(
+		() =>
+			[
+				'flex items-stretch gap-6 sm:gap-8',
+				prefersReducedMotion ? '' : 'transition-transform duration-700 ease-brand',
+				'will-change-transform',
+			]
+				.filter(Boolean)
+				.join(' '),
+		[prefersReducedMotion],
+	);
+
+	const slideBaseClasses = 'relative flex-none rounded-2xl border border-brand-dark/10 bg-white p-8 shadow-[0_18px_40px_rgba(10,37,64,0.15)] w-[85%] sm:w-[70%] lg:w-[42%]';
+	const slideTransitionClasses = prefersReducedMotion ? '' : 'transition-all duration-700 ease-brand';
 
 	return (
 		<section className="bg-white py-24" id="testimonials">
@@ -259,33 +293,38 @@ const TestimonialsSlider = ({
 					onMouseEnter={stopAutoplay}
 					onMouseLeave={startAutoplay}
 				>
-					<div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent pointer-events-none" aria-hidden="true" />
-					<div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent pointer-events-none" aria-hidden="true" />
+					<div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent" aria-hidden="true" />
+					<div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent" aria-hidden="true" />
 					<div
 						ref={trackRef}
-						className="flex items-stretch gap-6 sm:gap-8 transition-transform duration-700 ease-brand will-change-transform"
+						className={trackClassName}
 						style={{ transform: `translateX(${translateX}px)` }}
 						aria-live="polite"
 					>
 						{extendedItems.map((testimonial, idx) => {
 							const state = getSlideState(idx);
 							const isActive = state === 'active';
+							const isAdjacent = state === 'adjacent';
+							const stateClasses = isActive
+								? 'opacity-100 blur-0 scale-100 saturate-100'
+								: isAdjacent
+								? 'opacity-60 blur-[1.5px] saturate-75 scale-[0.95]'
+								: 'opacity-0 pointer-events-none scale-90';
+							const identityIndex = length ? ((idx - midpoint) % length + length) % length : idx;
 							return (
 								<article
 									key={`${testimonial.name}-${idx}`}
 									ref={(node) => {
 										slideRefs.current[idx] = node || null;
 									}}
-									className={`relative flex-none rounded-2xl border border-brand-dark/10 bg-white p-8 shadow-[0_18px_40px_rgba(10,37,64,0.15)] transition-all duration-700 ease-brand w-[85%] sm:w-[70%] lg:w-[42%] ${
-										isActive ? 'opacity-100 blur-0 scale-100' : state === 'adjacent' ? 'opacity-60 blur-[1.5px] saturate-75' : 'opacity-0'
-									}`}
+									className={`${slideBaseClasses} ${slideTransitionClasses} ${stateClasses}`}
 									style={{ pointerEvents: isActive ? 'auto' : 'none' }}
 									role="group"
-									aria-label={`Testimonial ${((idx - midpoint) % length + length) % length + 1} of ${length}`}
+									aria-label={`Testimonial ${identityIndex + 1} of ${length}`}
 								>
 									<header className="flex items-center gap-4">
 										<span className="flex h-14 w-14 flex-none items-center justify-center rounded-full bg-brand-cyan text-lg font-semibold text-white shadow-sm shadow-brand-dark/20">
-											{testimonial.avatar ?? testimonial.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
+											{testimonial.avatar ?? testimonial.name.split(' ').map((part) => part[0]).join('').slice(0, 2)}
 										</span>
 										<div className="leading-tight">
 											<h3
@@ -298,7 +337,8 @@ const TestimonialsSlider = ({
 												{testimonial.name}
 											</h3>
 											<p className="text-sm text-brand-dark/60">
-												{testimonial.role}, {testimonial.company}
+												{testimonial.role}
+												{testimonial.company ? `, ${testimonial.company}` : ''}
 											</p>
 										</div>
 									</header>
@@ -314,24 +354,24 @@ const TestimonialsSlider = ({
 							onClick={handlePrevious}
 							className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-brand-cyan/50 bg-white text-brand-cyan transition hover:bg-brand-cyan hover:text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40"
 							aria-label="Previous testimonial"
+							onFocus={stopAutoplay}
+							onBlur={startAutoplay}
 						>
 							<svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
 								<path d="M15 6 9 12l6 6" strokeLinecap="round" strokeLinejoin="round" />
 							</svg>
 						</button>
 						<div className="flex items-center gap-2">
-							{baseItems.map((testimonial, idx) => (
+							{normalizedItems.map((testimonial, idx) => (
 								<button
 									key={testimonial.name}
 									type="button"
 									onClick={() => {
 										stopAutoplay();
-										goTo(midpoint + idx);
+										goTo(midpoint + idx, { focusHeading: true });
 										startAutoplay();
 									}}
-									className={`h-2.5 w-8 rounded-full transition ${
-										idx === logicalIndex ? 'bg-brand-cyan' : 'bg-brand-cyan/30'
-									}`}
+									className={`h-2.5 w-8 rounded-full transition ${idx === logicalIndex ? 'bg-brand-cyan' : 'bg-brand-cyan/30'}`}
 									aria-label={`Go to testimonial from ${testimonial.name}`}
 									onFocus={stopAutoplay}
 									onBlur={startAutoplay}
