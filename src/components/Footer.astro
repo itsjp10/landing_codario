@@ -1,61 +1,87 @@
 ---
 const year = new Date().getFullYear();
 const navLinks = [
-	{ href: '#work', label: 'Work' },
-	{ href: '#services', label: 'Services' },
-	{ href: '#pricing', label: 'Pricing' },
-	{ href: '#about', label: 'About' },
-	{ href: '#contact', label: 'Contact' },
+	{ href: "#work", label: "Work" },
+	{ href: "#services", label: "Services" },
+	{ href: "#pricing", label: "Pricing" },
+	{ href: "#about", label: "About" },
+	{ href: "#contact", label: "Contact" },
 ];
 const socials = [
-	{ href: 'https://github.com/codario', label: 'GitHub' },
-	{ href: 'https://www.linkedin.com/company/codario', label: 'LinkedIn' },
-	{ href: 'https://x.com/codariolabs', label: 'X (Twitter)' },
+	{ href: "https://github.com/codario-labs", label: "GitHub" },
+	{ href: "https://www.linkedin.com/company/codario", label: "LinkedIn" },
+	{ href: "https://x.com/codariolabs", label: "X (Twitter)" },
 ];
 ---
 
 <footer class="bg-brand-dark text-brand-gray" id="footer">
 	<div class="container grid gap-12 py-16 lg:grid-cols-[1.5fr_1fr_1fr]">
 		<div class="space-y-6">
-			<a href="#top" class="flex items-center gap-3 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40">
-				<img src="/assets/logo-codario.svg" width="44" height="44" alt="Codario Labs logo" loading="lazy" />
-				<div>
-					<p class="font-display text-xl font-semibold">Codario Labs</p>
-					<p class="text-sm text-white/60">Modern web experiences for teams who need to ship faster.</p>
-				</div>
+			<a
+				href="#top"
+				class="flex items-center gap-3 text-white focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40"
+			>
+				<img
+					src="/assets/codario_no_bg.png"
+					alt="Codario Labs logo"
+					loading="lazy"
+					class="h-10 w-auto scale-[2.5] hover:scale-[2.6] transition-transform"
+				/>
 			</a>
 			<p class="max-w-lg text-sm leading-relaxed text-white/70">
-				We design, build, and maintain web products that convert. From launch-ready landing pages to scalable web apps, we handle the roadmap, execution, and growth iterations with agile teams and proven processes.
+				We design, build, and maintain web products that convert. From
+				launch-ready landing pages to scalable web apps, we handle the
+				roadmap, execution, and growth iterations with agile teams and
+				proven processes.
 			</p>
 		</div>
 
 		<div>
 			<h3 class="font-display text-lg text-white">Navigation</h3>
 			<ul class="mt-5 space-y-3 text-sm text-white/70">
-				{navLinks.map(({ href, label }) => (
-					<li>
-						<a class="transition hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-4 focus-visible:ring-brand-cyan/40" href={href}>
-							{label}
-						</a>
-					</li>
-				))}
+				{
+					navLinks.map(({ href, label }) => (
+						<li>
+							<a
+								class="transition hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-4 focus-visible:ring-brand-cyan/40"
+								href={href}
+							>
+								{label}
+							</a>
+						</li>
+					))
+				}
 			</ul>
 		</div>
 
 		<div class="space-y-5">
 			<h3 class="font-display text-lg text-white">Connect</h3>
 			<ul class="space-y-3 text-sm text-white/70">
-				{socials.map(({ href, label }) => (
-					<li>
-						<a class="inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-4 focus-visible:ring-brand-cyan/40" href={href} target="_blank" rel="noreferrer noopener">
-							<span>{label}</span>
-							<svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-								<path d="M4 12L12 4" />
-								<path d="M5 4h7v7" />
-							</svg>
-						</a>
-					</li>
-				))}
+				{
+					socials.map(({ href, label }) => (
+						<li>
+							<a
+								class="inline-flex items-center gap-2 transition hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-4 focus-visible:ring-brand-cyan/40"
+								href={href}
+								target="_blank"
+								rel="noreferrer noopener"
+							>
+								<span>{label}</span>
+								<svg
+									class="h-3.5 w-3.5"
+									viewBox="0 0 16 16"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="1.5"
+									aria-hidden="true"
+								>
+									<path d="M4 12L12 4" />
+									<path d="M5 4h7v7" />
+								</svg>
+							</a>
+						</li>
+					))
+				}
 			</ul>
 			<div class="text-xs text-white/60">
 				<p>Legal Address</p>
@@ -65,14 +91,22 @@ const socials = [
 		</div>
 	</div>
 	<div class="border-t border-white/10 py-6">
-		<div class="container flex flex-col gap-4 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between">
+		<div
+			class="container flex flex-col gap-4 text-xs text-white/50 sm:flex-row sm:items-center sm:justify-between"
+		>
 			<p>&copy; {year} Codario Labs. All rights reserved.</p>
 			<p>
-				<a class="hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-brand-cyan/40" href="#privacy">
+				<a
+					class="hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
+					href="#privacy"
+				>
 					Privacy Policy
 				</a>
 				<span aria-hidden="true" class="mx-2">•</span>
-				<a class="hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-brand-cyan/40" href="#terms">
+				<a
+					class="hover:text-white focus-visible:outline-none focus-visible:text-white focus-visible:ring-2 focus-visible:ring-brand-cyan/40"
+					href="#terms"
+				>
 					Terms
 				</a>
 			</p>

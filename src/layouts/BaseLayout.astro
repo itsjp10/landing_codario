@@ -30,6 +30,8 @@ const seoProps = {
 	breadcrumbs,
 	type,
 };
+
+const faviconHref = '/assets/favicon.png?v=1';
 ---
 
 <!DOCTYPE html>
@@ -56,7 +58,11 @@ const seoProps = {
 				href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@600;700&display=swap"
 			/>
 		</noscript>
-		<link rel="icon" type="image/svg+xml" href="/assets/logo-codario.svg" />
+		<link rel="icon" type="image/png" sizes="16x16" href={faviconHref} />
+		<link rel="icon" type="image/png" sizes="32x32" href={faviconHref} />
+		<link rel="icon" type="image/png" sizes="48x48" href={faviconHref} />
+		<link rel="apple-touch-icon" sizes="180x180" href={faviconHref} />
+		<link rel="shortcut icon" href={faviconHref} />
 		<link rel="manifest" href="/site.webmanifest" />
 		<HeadSEO {...seoProps} />
 		<slot name="head" />

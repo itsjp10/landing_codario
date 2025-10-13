@@ -1,12 +1,12 @@
-<section class="bg-white py-24" id="contact">
+﻿<section class="bg-white py-24" id="contact">
 	<div class="container grid gap-12 lg:grid-cols-[minmax(0,0.6fr)_minmax(0,0.8fr)] lg:items-start">
 		<div class="space-y-6">
 			<p class="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">Contact</p>
 			<h2 class="text-3xl font-semibold text-brand-dark sm:text-4xl">
-				Let’s map your next release.
+				Let's map your next release.
 			</h2>
 			<p class="text-sm text-brand-dark/70">
-				Share your roadmap, goals, and timeline. We’ll reply same day with availability, relevant work, and a proposal outline.
+				Share your roadmap, goals, and timeline. We'll reply same day with availability, relevant work, and a proposal outline.
 			</p>
 			<ul class="space-y-4 text-sm text-brand-dark/75">
 				<li class="flex items-start gap-3">
@@ -87,8 +87,8 @@
 					>
 						<option value="">Select a range</option>
 						<option value="under-5k">Under $5,000</option>
-						<option value="5k-15k">$5,000 – $15,000</option>
-						<option value="15k-30k">$15,000 – $30,000</option>
+						<option value="5k-15k">$5,000 and $15,000</option>
+						<option value="15k-30k">$15,000 and $30,000</option>
 						<option value="30k-plus">$30,000+</option>
 					</select>
 				</div>
@@ -161,7 +161,7 @@
 				if (response.ok) {
 					form.reset();
 					if (feedback) {
-						feedback.textContent = 'Thanks! Your message is on its way. We’ll reach out within one business day.';
+						feedback.textContent = "Thanks! Your message is on its way. We'll reach out within one business day.";
 						feedback.className = 'text-sm text-brand-dark/80 font-semibold';
 					}
 					renderConfetti();
@@ -170,7 +170,7 @@
 				}
 			} catch (error) {
 				if (feedback) {
-					feedback.textContent = 'Something went wrong. Please email hello@codariolabs.com and we’ll take care of you.';
+					feedback.textContent = 'Something went wrong. Please email hello@codariolabs.com and weâ€™ll take care of you.';
 					feedback.className = 'text-sm text-red-600';
 				}
 			}
@@ -206,3 +206,4 @@
 		}
 	}
 </style>
+

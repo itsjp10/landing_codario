@@ -1,0 +1,118 @@
+---
+const values = [
+	{
+		title: 'Performance first',
+		description: 'We tune every build for speed, accessibility, and measurable impact across devices.',
+	},
+	{
+		title: 'Design with intent',
+		description: 'Interfaces stay consistent, inclusive, and rooted in the story your customers need to hear.',
+	},
+	{
+		title: 'Collaborative delivery',
+		description: 'Weekly rituals, transparent roadmaps, and async-ready updates keep momentum high.',
+	},
+];
+---
+
+<section id="about" class="bg-white py-24 sm:py-28">
+	<div class="container mx-auto flex flex-col gap-16 px-6 sm:px-8 lg:grid lg:grid-cols-[minmax(0,0.55fr)_minmax(0,0.45fr)] lg:items-center lg:gap-20 lg:px-12">
+		<div data-about-animate class="space-y-6 opacity-0 transition-all duration-700 ease-out translate-y-8 will-change-transform">
+			<p class="text-sm font-semibold uppercase tracking-[0.28em] text-brand-cyan">About Codario Labs</p>
+			<h2 class="text-3xl font-semibold text-brand-dark sm:text-4xl">
+				We craft digital launches with the pace and polish modern teams expect.
+			</h2>
+			<p class="text-base leading-relaxed text-brand-dark/80">
+				Codario Labs is a Barranquilla-born studio building web products for ambitious startups and growing small businesses across Latin America and beyond.
+				We pair strategy, design, and engineering to help founders make confident bets on their next release.
+			</p>
+			<p class="text-base leading-relaxed text-brand-dark/80">
+				From lightning-fast landing pages to robust product dashboards, every engagement starts with clarity around outcomes,
+				people, and performance. Our team brings product thinking, systems design, and automation together so shipping feels calm — not chaotic.
+			</p>
+			<p class="text-base leading-relaxed text-brand-dark/80">
+				We meet you where you are: remote-friendly collaboration, async updates, and weekly rituals that keep stakeholders aligned while still moving quickly.
+			</p>
+
+			<div class="rounded-3xl border border-brand-dark/10 bg-white/80 p-6 shadow-lg shadow-brand-dark/5">
+				<h3 class="text-sm font-semibold uppercase tracking-[0.28em] text-brand-dark/60">Our approach</h3>
+				<ul class="mt-4 space-y-4">
+					{
+						values.map((value) => (
+							<li class="flex gap-4">
+								<span class="mt-1 inline-flex h-2.5 w-2.5 flex-shrink-0 rounded-full bg-brand-lime" aria-hidden="true" />
+								<div>
+									<p class="font-semibold text-brand-dark">{value.title}</p>
+									<p class="text-sm leading-relaxed text-brand-dark/75">{value.description}</p>
+								</div>
+							</li>
+						))
+					}
+				</ul>
+			</div>
+
+			<div class="pt-2">
+				<a
+					class="btn-primary inline-flex w-fit items-center gap-2 bg-brand-dark text-white hover:bg-brand-cyan hover:text-brand-dark focus-visible:bg-brand-cyan focus-visible:text-brand-dark"
+					href="#contact"
+				>
+					Let's build together
+					<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+						<path d="M5 12h14" stroke-linecap="round" />
+						<path d="m12 5 7 7-7 7" stroke-linecap="round" stroke-linejoin="round" />
+					</svg>
+				</a>
+			</div>
+
+			<!-- Adjust the copy above to reflect future milestones or service pillars -->
+		</div>
+
+		<div data-about-animate class="relative mx-auto w-full max-w-[520px] overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-gray/70 opacity-0 transition-all duration-700 ease-out translate-y-8 will-change-transform">
+			<img
+				src="/assets/about-team.jpg"
+				alt="Codario Labs team collaborating inside a modern workspace."
+				class="h-full w-full object-cover"
+				loading="lazy"
+			/>
+			<div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-brand-cyan/10 via-transparent to-brand-lime/10" />
+		</div>
+	</div>
+</section>
+
+<script is:inline>
+	const initAboutAnimations = () => {
+		const animatedElements = document.querySelectorAll('[data-about-animate]');
+
+		if (!animatedElements.length) return;
+
+		const makeVisible = (el) => {
+			el.classList.remove('opacity-0', 'translate-y-8');
+			el.classList.add('opacity-100', 'translate-y-0');
+		};
+
+		if (!('IntersectionObserver' in window)) {
+			animatedElements.forEach(makeVisible);
+			return;
+		}
+
+		const observer = new IntersectionObserver(
+			(entries, obs) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						makeVisible(entry.target);
+						obs.unobserve(entry.target);
+					}
+				});
+			},
+			{ threshold: 0.2, rootMargin: '0px 0px -10% 0px' },
+		);
+
+		animatedElements.forEach((element) => observer.observe(element));
+	};
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', initAboutAnimations, { once: true });
+	} else {
+		initAboutAnimations();
+	}
+</script>
