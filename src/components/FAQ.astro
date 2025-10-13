@@ -1,54 +1,54 @@
----
+﻿---
 const faqs = [
 	{
 		question: 'How fast can we launch a new landing page?',
 		answer:
-			'Most landing pages ship in 10-14 days. We start with a positioning workshop, then move into wireframes, design, development, analytics setup, and QA before going live.',
+			'Typical timeline: 7-14 days. Day 1-2 discovery and copy draft, day 3-6 design and build, day 7 QA, day 8-10 analytics and instrumentation, day 11-14 polish and launch. Rush options available if assets or copy are ready.',
 	},
 	{
 		question: 'Do you work with in-house teams or agencies?',
 		answer:
-			'Both. We often embed with internal product, marketing, or ops teams, and we also collaborate with agencies that need extra engineering or design horsepower for a project.',
+			'Yes. We slot in as an extension of your team or partner agency-shared roadmap, GitHub repo access, and your preferred process (Sprint or Kanban). We respect your design system and code standards.',
 	},
 	{
 		question: 'What tech stack do you use?',
 		answer:
-			'We love Astro, React islands, Tailwind, and TypeScript. We pair them with modern tooling like Vercel, Supabase, Node APIs, and any integrations your ecosystem requires.',
+			'Frontend: Astro, Next.js, React, Tailwind, GSAP. Backend: Node.js (Express or Nest), PostgreSQL with Prisma, Supabase or Firebase. Infra: Vercel, AWS or Azure when needed. CMS: Contentful, Sanity, or your preferred headless option. Testing and QA: Playwright, Lighthouse, accessibility tools (axe). Analytics: GA4, server and client events, dashboards.',
 	},
 	{
 		question: 'Can you support ongoing CRO and growth experiments?',
 		answer:
-			'Yes. Our Care retainer includes a dedicated growth squad running experiments, shipping updates, and reporting on KPIs every sprint.',
+			'Absolutely. We run A/B tests, copy and design trials, and performance experiments; set up event tracking, heatmaps, and dashboards. We propose a monthly test cadence and report on wins and learnings.',
 	},
 	{
 		question: 'How do you ensure accessibility?',
 		answer:
-			'We follow WCAG 2.2 AA guidelines, run automated checks, conduct manual audits, and design with semantic structure and focus states baked in from the start.',
+			'We ship to WCAG 2.1 AA: semantic HTML, keyboard navigation, focus states, color-contrast checks, descriptive alt and labels, reduced-motion support, and automated audits (axe and Lighthouse) plus manual screen-reader passes.',
 	},
 	{
 		question: 'What if we only need engineering or design?',
 		answer:
-			'We offer focused engagements—design-only, front-end implementation, CMS migrations, and more. Tell us what you need and we will scope the right team.',
+			'We can deliver engineering-only, design-only, or end-to-end. We are comfortable implementing your Figma files or creating a mini design system from scratch.',
 	},
 	{
 		question: 'Do you handle analytics and instrumentation?',
 		answer:
-			'Absolutely. We implement analytics (GA4, Mixpanel, Segment), tracking, dashboards, and event schemas so teams can measure every launch.',
+			'Yes. GA4 setup, consent banner, UTM standards, event schema, server and client events, funnels, and goals. We can wire Segment, Meta, and LinkedIn pixels and ship a lightweight dashboard.',
 	},
 	{
 		question: 'How do communications run during an engagement?',
 		answer:
-			'You will have a dedicated Slack channel, weekly standups, async status updates, and shared docs with timelines, deliverables, and decisions.',
+			'Dedicated Slack or Teams channel, a single PM or lead as your point of contact, weekly demo with notes, and a shared board (Linear or Jira). SLA: same-day response on weekdays; critical issues get priority.',
 	},
 	{
 		question: 'What happens post-launch?',
 		answer:
-			'We provide documentation, handoff sessions, and optional retainers for ongoing improvements, monitoring, and new feature support.',
+			'30-60 days of warranty bug fixes, handoff docs, and training. Optional maintenance or growth retainer for updates, experiments, and monitoring (uptime, errors, Core Web Vitals).',
 	},
 	{
 		question: 'Can you integrate with our existing systems?',
 		answer:
-			'Yes. CRM, payment gateways, marketing automation, internal APIs—we scope integrations up front and ensure they are production-ready before launch.',
+			'Yes. APIs, webhooks, OAuth. Common integrations include Stripe, HubSpot or Salesforce, Auth0 or Clerk, CMSs, Zapier or Make, and internal REST or GraphQL services. We handle data migration and sandbox testing before go-live.',
 	},
 ];
 
@@ -77,7 +77,7 @@ const faqSchema = {
 				Need more details? Reach out via the contact form and we’ll share playbooks, case studies, and timelines suited to your roadmap.
 			</p>
 		</div>
-		<div class="mt-12 divide-y divide-brand-dark/10 rounded-3xl border border-brand-dark/10 bg-brand-gray/50">
+		<div class="mt-12 divide-y divide-brand-dark/10 overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-gray/50">
 			{faqs.map((faq, index) => {
 				const panelId = `faq-panel-${index}`;
 				const buttonId = `faq-button-${index}`;
@@ -92,7 +92,14 @@ const faqSchema = {
 							data-faq-trigger
 						>
 							<span>{faq.question}</span>
-							<svg class="h-5 w-5 flex-none text-brand-dark/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+							<svg
+								class="h-5 w-5 flex-none text-brand-dark/50 transition-transform duration-200 ease-out"
+								data-faq-icon
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.6"
+							>
 								<path d="M12 5v14" stroke-linecap="round" />
 								<path d="M5 12h14" stroke-linecap="round" />
 							</svg>
@@ -115,11 +122,12 @@ const faqSchema = {
 <script type="application/ld+json" is:inline>{JSON.stringify(faqSchema)}</script>
 
 <script type="module" is:inline>
-	document.addEventListener('astro:page-load', () => {
+	const setupFaq = () => {
 		const items = document.querySelectorAll('[data-faq-trigger]');
 		items.forEach((button) => {
 			const panelId = button.getAttribute('aria-controls');
 			const panel = panelId ? document.getElementById(panelId) : null;
+			const icon = button.querySelector('[data-faq-icon]');
 			if (!panel) return;
 
 			button.addEventListener('click', () => {
@@ -127,11 +135,32 @@ const faqSchema = {
 				button.setAttribute('aria-expanded', String(!expanded));
 				panel.classList.toggle('hidden', expanded);
 				if (!expanded) {
+					panel.classList.remove('animate-faq');
+					// trigger reflow for re-animating
+					void panel.offsetWidth;
 					panel.classList.add('animate-faq');
+				} else {
+					panel.classList.remove('animate-faq');
+				}
+				if (icon) {
+					icon.classList.toggle('rotate-45', !expanded);
+					icon.classList.toggle('text-brand-cyan', !expanded);
 				}
 			});
+
+			panel.addEventListener('animationend', () => {
+				panel.classList.remove('animate-faq');
+			});
 		});
-	});
+	};
+
+	if (document.readyState === 'complete' || document.readyState === 'interactive') {
+		setupFaq();
+	} else {
+		document.addEventListener('DOMContentLoaded', setupFaq, { once: true });
+	}
+
+	document.addEventListener('astro:page-load', setupFaq);
 </script>
 
 <style is:global>
