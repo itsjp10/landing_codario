@@ -33,9 +33,16 @@ const tabs = [
 
 const ServicesTabs = () => {
 	const [activeId, setActiveId] = useState(tabs[0].id);
+	const [mobileIndex, setMobileIndex] = useState(0);
+	const [animDirection, setAnimDirection] = useState(1);
 	const panelsRef = useRef(null);
 	const buttonsRef = useRef({});
 	const previousId = useRef(activeId);
+	const autoplayRef = useRef(null);
+	const mediaQueryRef = useRef(null);
+	const startAutoplayRef = useRef(() => {});
+	const stopAutoplayRef = useRef(() => {});
+	const mobileIndexRef = useRef(mobileIndex);
 	const prefersReducedMotion = useMemo(
 		() => (typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null),
 		[],
@@ -104,10 +111,126 @@ const ServicesTabs = () => {
 		previousId.current = activeId;
 	}, [activeId]);
 
+	useEffect(() => {
+		const idx = tabs.findIndex((tab) => tab.id === activeId);
+		if (idx !== -1) {
+			setMobileIndex(idx);
+		}
+	}, [activeId]);
+
+	useEffect(() => {
+		mobileIndexRef.current = mobileIndex;
+	}, [mobileIndex]);
+
+	useEffect(() => {
+		if (typeof window === 'undefined') return undefined;
+
+		const media = window.matchMedia('(min-width: 1024px)');
+		mediaQueryRef.current = media;
+		const stop = () => {
+			if (autoplayRef.current) {
+				clearInterval(autoplayRef.current);
+				autoplayRef.current = null;
+			}
+		};
+
+		const start = () => {
+			if (prefersReducedMotion?.matches) return;
+			if (media.matches) {
+				stop();
+				return;
+			}
+			stop();
+			autoplayRef.current = window.setInterval(() => {
+				setAnimDirection(1);
+				setMobileIndex((prev) => {
+					const next = (prev + 1) % tabs.length;
+					setActiveId(tabs[next].id);
+					return next;
+				});
+			}, 9000);
+		};
+
+		startAutoplayRef.current = start;
+		stopAutoplayRef.current = stop;
+
+		const handleVisibility = () => {
+			if (document.hidden) {
+				stop();
+			} else {
+				start();
+			}
+		};
+
+		const handleMediaChange = () => {
+			stop();
+			start();
+		};
+
+		start();
+
+		document.addEventListener('visibilitychange', handleVisibility);
+		if (typeof media.addEventListener === 'function') {
+			media.addEventListener('change', handleMediaChange);
+		} else if (typeof media.addListener === 'function') {
+			media.addListener(handleMediaChange);
+		}
+
+		return () => {
+			stop();
+			document.removeEventListener('visibilitychange', handleVisibility);
+			if (typeof media.removeEventListener === 'function') {
+				media.removeEventListener('change', handleMediaChange);
+			} else if (typeof media.removeListener === 'function') {
+				media.removeListener(handleMediaChange);
+			}
+		};
+	}, [prefersReducedMotion]);
+
+	useEffect(() => {
+		const stop = stopAutoplayRef.current;
+		return () => {
+			stop?.();
+		};
+	}, []);
+
 	const handleTabClick = (id) => {
 		if (id === activeId) return;
+		const targetIdx = tabs.findIndex((tab) => tab.id === id);
+		if (targetIdx !== -1) {
+			const current = mobileIndexRef.current;
+			const diff = targetIdx - current;
+			if (diff !== 0) {
+				setAnimDirection(diff > 0 ? 1 : -1);
+			}
+		}
 		setActiveId(id);
 	};
+
+	const handleMobileChange = (direction) => {
+		const stop = stopAutoplayRef.current;
+		const start = startAutoplayRef.current;
+
+		stop?.();
+
+		setMobileIndex((prev) => {
+			const next = Math.min(Math.max(prev + direction, 0), tabs.length - 1);
+			if (next !== prev) {
+				setAnimDirection(direction > 0 ? 1 : -1);
+				setActiveId(tabs[next].id);
+			}
+			return next;
+		});
+
+		start?.();
+	};
+
+	const isAtStart = mobileIndex <= 0;
+	const isAtEnd = mobileIndex >= tabs.length - 1;
+	const animationClass =
+		animDirection >= 0
+			? 'animate-[services-carousel-next_560ms_cubic-bezier(0.22,1,0.36,1)]'
+			: 'animate-[services-carousel-prev_560ms_cubic-bezier(0.22,1,0.36,1)]';
 
 	const handleKeyDown = (event, index) => {
 		const { key } = event;
@@ -140,12 +263,13 @@ const ServicesTabs = () => {
 	};
 
 	return (
-		<section id="services" className="bg-white py-24 sm:py-28">
-			<div className="container grid gap-12 lg:grid-cols-[minmax(0,0.48fr)_minmax(0,0.77fr)] lg:items-start">
-				<div className="space-y-6">
-					<p className="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">Service Models</p>
-					<h2 className="section-title text-left">
-						Pick the engagement that fits your roadmap today—and scales with your product tomorrow.
+		<>
+			<section id="services" className="bg-white py-24 sm:py-28">
+				<div className="container space-y-12 lg:grid lg:gap-12 lg:grid-cols-[minmax(0,0.48fr)_minmax(0,0.77fr)] lg:items-start">
+					<div className="space-y-6">
+						<p className="text-sm font-semibold uppercase tracking-[0.32em] text-brand-dark/60">Service Models</p>
+						<h2 className="section-title text-left">
+							Pick the engagement that fits your roadmap today-and scales with your product tomorrow.
 					</h2>
 					<p className="text-base text-brand-dark/70">
 						Choose from fast-moving launches, full product builds, or ongoing retainers. Each track pairs strategy with
@@ -153,7 +277,86 @@ const ServicesTabs = () => {
 					</p>
 				</div>
 
-				<div ref={panelsRef} className="relative min-h-[400px]">
+				<div className="lg:hidden">
+					<div className="relative">
+						<article
+							key={mobileIndex}
+							className={`relative rounded-3xl border border-brand-dark/10 bg-white/95 p-7 pt-16 shadow-xl shadow-brand-dark/10 ${animationClass}`}
+							data-mobile-panel
+							role="group"
+							aria-label={`${tabs[mobileIndex].label} service`}
+							onMouseEnter={() => stopAutoplayRef.current?.()}
+							onMouseLeave={() => startAutoplayRef.current?.()}
+							onFocus={() => stopAutoplayRef.current?.()}
+							onBlur={() => startAutoplayRef.current?.()}
+						>
+							<div className="pointer-events-none absolute inset-x-0 top-0 flex items-center justify-between px-4 pt-4">
+								<button
+									type="button"
+									onClick={() => handleMobileChange(-1)}
+									disabled={isAtStart}
+									aria-label="Previous service"
+									className={`pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-dark/10 bg-white text-brand-dark shadow-md shadow-brand-dark/10 transition hover:bg-brand-cyan hover:text-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 ${
+										isAtStart ? 'pointer-events-none opacity-40' : ''
+									}`}
+									onFocus={() => stopAutoplayRef.current?.()}
+									onBlur={() => startAutoplayRef.current?.()}
+								>
+									<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+										<path d="M15 6 9 12l6 6" strokeLinecap="round" strokeLinejoin="round" />
+									</svg>
+								</button>
+								<button
+									type="button"
+									onClick={() => handleMobileChange(1)}
+									disabled={isAtEnd}
+									aria-label="Next service"
+									className={`pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-dark/10 bg-white text-brand-dark shadow-md shadow-brand-dark/10 transition hover:bg-brand-cyan hover:text-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 ${
+										isAtEnd ? 'pointer-events-none opacity-40' : ''
+									}`}
+									onFocus={() => stopAutoplayRef.current?.()}
+									onBlur={() => startAutoplayRef.current?.()}
+								>
+									<svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+										<path d="M9 6l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" />
+									</svg>
+								</button>
+							</div>
+							<div className="space-y-4">
+								<p className="text-xs font-semibold uppercase tracking-[0.32em] text-brand-dark/55">
+									{tabs[mobileIndex].tagline}
+								</p>
+								<h3 className="text-2xl font-semibold text-brand-dark">{tabs[mobileIndex].label}</h3>
+								<p className="text-sm leading-relaxed text-brand-dark/75">{tabs[mobileIndex].description}</p>
+								<ul className="space-y-3 text-sm text-brand-dark/80">
+									{tabs[mobileIndex].bullets.map((bullet) => (
+										<li key={bullet} className="flex items-start gap-3">
+											<span className="mt-1 h-2.5 w-2.5 rounded-full bg-brand-lime" />
+											<span>{bullet}</span>
+										</li>
+									))}
+								</ul>
+								<a
+									className="btn-primary inline-flex w-fit items-center gap-2 bg-brand-dark text-white hover:bg-brand-cyan hover:text-brand-dark focus-visible:bg-brand-cyan focus-visible:text-brand-dark"
+									href="#contact"
+								>
+									Get a Proposal
+								</a>
+							</div>
+							<div className="relative mt-6 overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-gray/80 p-4">
+								<img
+									src={tabs[mobileIndex].mock}
+									alt={`${tabs[mobileIndex].label} showcase`}
+									className="h-full w-full rounded-2xl object-cover"
+									loading="lazy"
+								/>
+								<div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-cyan/10 to-brand-lime/0" />
+							</div>
+						</article>
+					</div>
+				</div>
+
+				<div ref={panelsRef} className="relative hidden min-h-[400px] lg:block">
 					{tabs.map((tab) => {
 						const selected = tab.id === activeId;
 						return (
@@ -258,7 +461,47 @@ const ServicesTabs = () => {
 					})}
 				</div>
 			</div>
-		</section>
+			</section>
+			<style>
+				{`
+					@keyframes services-carousel-next {
+						0% {
+							opacity: 0;
+							transform: translate3d(48px, 14px, 0) scale(0.92) rotate(1deg);
+							filter: blur(12px);
+						}
+						55% {
+							opacity: 1;
+							transform: translate3d(-6px, -2px, 0) scale(1.03) rotate(-0.35deg);
+							filter: blur(0);
+						}
+						100% {
+							opacity: 1;
+							transform: translate3d(0, 0, 0) scale(1) rotate(0);
+							filter: blur(0);
+						}
+					}
+
+					@keyframes services-carousel-prev {
+						0% {
+							opacity: 0;
+							transform: translate3d(-48px, 14px, 0) scale(0.92) rotate(-1deg);
+							filter: blur(12px);
+						}
+						55% {
+							opacity: 1;
+							transform: translate3d(6px, -2px, 0) scale(1.03) rotate(0.35deg);
+							filter: blur(0);
+						}
+						100% {
+							opacity: 1;
+							transform: translate3d(0, 0, 0) scale(1) rotate(0);
+							filter: blur(0);
+						}
+					}
+				`}
+			</style>
+		</>
 	);
 };
 
