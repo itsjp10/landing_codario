@@ -2,33 +2,33 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 const defaultItems = [
 	{
-		name: 'Ava Smith',
-		role: 'Founder',
-		company: 'Seedly',
+		name: 'Rosa Garcia',
+		role: 'Inspector',
+		company: 'YDN',
 		quote: 'They shipped in days, not months. Clean, scalable, and on brand.',
 	},
 	{
-		name: 'Liam Jones',
-		role: 'COO',
-		company: 'MarketOne',
+		name: 'Liliana',
+		role: 'PM',
+		company: 'Uninorte',
 		quote: 'Our conversion lifted 32%. Clear communication and fast delivery.',
 	},
 	{
-		name: 'Noah Lee',
-		role: 'CTO',
-		company: 'Nimbus',
+		name: 'Leonardo',
+		role: 'CM',
+		company: 'Vive Río',
 		quote: 'Reliable, thoughtful engineering and solid code quality.',
 	},
 	{
-		name: 'Emma Davis',
+		name: 'Issac',
 		role: 'PM',
-		company: 'Flowbit',
+		company: 'AIA',
 		quote: 'Smooth process, from scope to launch. Great collaboration.',
 	},
 	{
 		name: 'Olivia Chen',
 		role: 'CEO',
-		company: 'BrightCart',
+		company: 'English Solutions',
 		quote: 'The best dev partner we\u2019ve worked with\u2014period.',
 	},
 ];

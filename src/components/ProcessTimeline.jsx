@@ -165,7 +165,7 @@ const ProcessTimeline = ({ steps = defaultSteps }) => {
 								data-step
 								className="relative rounded-3xl border border-brand-dark/10 bg-white/90 p-8 shadow-soft transition will-change-transform"
 							>
-								<div className="flex flex-col gap-4 md:flex-row md:items-start md:gap-6">
+								<div className="flex flex-col gap-4 md:flex-row md:items-center md:gap-6">
 									<div className="flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.4em] text-brand-dark/50">
 										<span className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-cyan/10 text-brand-dark">
 											{String(index + 1).padStart(2, '0')}
