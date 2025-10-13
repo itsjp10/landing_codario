@@ -296,7 +296,7 @@ const ServicesTabs = () => {
 									onClick={() => handleMobileChange(-1)}
 									disabled={isAtStart}
 									aria-label="Previous service"
-									className={`pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-dark/10 bg-white text-brand-dark shadow-md shadow-brand-dark/10 transition hover:bg-brand-cyan hover:text-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 ${
+									className={`pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-dark/10 bg-white text-brand-dark shadow-md shadow-brand-dark/10 transition hover:text-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 ${
 										isAtStart ? 'pointer-events-none opacity-40' : ''
 									}`}
 									onFocus={() => stopAutoplayRef.current?.()}
@@ -311,7 +311,7 @@ const ServicesTabs = () => {
 									onClick={() => handleMobileChange(1)}
 									disabled={isAtEnd}
 									aria-label="Next service"
-									className={`pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-dark/10 bg-white text-brand-dark shadow-md shadow-brand-dark/10 transition hover:bg-brand-cyan hover:text-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 ${
+									className={`pointer-events-auto inline-flex h-9 w-9 items-center justify-center rounded-full border border-brand-dark/10 bg-white text-brand-dark shadow-md shadow-brand-dark/10 transition hover:text-brand-dark focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-cyan/40 ${
 										isAtEnd ? 'pointer-events-none opacity-40' : ''
 									}`}
 									onFocus={() => stopAutoplayRef.current?.()}
@@ -344,12 +344,6 @@ const ServicesTabs = () => {
 								</a>
 							</div>
 							<div className="relative mt-6 overflow-hidden rounded-3xl border border-brand-dark/10 bg-brand-gray/80 p-4">
-								<img
-									src={tabs[mobileIndex].mock}
-									alt={`${tabs[mobileIndex].label} showcase`}
-									className="h-full w-full rounded-2xl object-cover"
-									loading="lazy"
-								/>
 								<div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-br from-brand-cyan/10 to-brand-lime/0" />
 							</div>
 						</article>
