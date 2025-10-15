@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
 import tailwind from '@astrojs/tailwind';
+import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
 	site: 'https://www.codariolabs.com',
@@ -13,7 +14,8 @@ export default defineConfig({
 		}),
 		sitemap(),
 	],
-	output: 'static',
+	output: 'server',
+	adapter: vercel({}),
 	vite: {
 		server: {
 			allowedHosts: ['5a54c8bf4e36.ngrok-free.app'],
